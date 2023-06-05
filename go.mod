@@ -32,7 +32,7 @@ require (
 	github.com/ipfs/go-peertaskqueue v0.8.1
 	github.com/ipfs/go-unixfsnode v1.7.1
 	github.com/ipld/go-codec-dagpb v1.6.0
-	github.com/ipld/go-ipld-prime v0.20.0
+	github.com/ipld/go-ipld-prime v0.20.1-0.20230619045951-499e9b9c2024
 	github.com/ipld/go-ipld-prime/storage/bsadapter v0.0.0-20230102063945-1a409dc236dd
 	github.com/jbenet/goprocess v0.1.4
 	github.com/libp2p/go-buffer-pool v0.1.0

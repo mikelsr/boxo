@@ -7,7 +7,7 @@ require (
 	github.com/ipfs/go-block-format v0.1.2
 	github.com/ipfs/go-cid v0.4.1
 	github.com/ipfs/go-datastore v0.6.0
-	github.com/ipld/go-ipld-prime v0.20.0
+	github.com/ipld/go-ipld-prime v0.20.1-0.20230619045951-499e9b9c2024
 	github.com/libp2p/go-libp2p v0.26.3
 	github.com/libp2p/go-libp2p-routing-helpers v0.7.0
 	github.com/multiformats/go-multiaddr v0.8.0
