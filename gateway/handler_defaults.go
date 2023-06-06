@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/ipfs/boxo/files"
-	ipfspath "github.com/ipfs/boxo/path"
+	"github.com/ipfs/boxo/path"
 	mc "github.com/multiformats/go-multicodec"
 
 	"go.opentelemetry.io/otel/attribute"
@@ -19,7 +19,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (i *handler) serveDefaults(ctx context.Context, w http.ResponseWriter, r *http.Request, maybeResolvedImPath, immutableContentPath ipfspath.ImmutablePath, contentPath ipfspath.Path, begin time.Time, requestedContentType string, logger *zap.SugaredLogger) bool {
+func (i *handler) serveDefaults(ctx context.Context, w http.ResponseWriter, r *http.Request, maybeResolvedImPath, immutableContentPath path.ImmutablePath, contentPath path.Path, begin time.Time, requestedContentType string, logger *zap.SugaredLogger) bool {
 	ctx, span := spanTrace(ctx, "Handler.ServeDefaults", trace.WithAttributes(attribute.String("path", contentPath.String())))
 	defer span.End()
 

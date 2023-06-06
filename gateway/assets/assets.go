@@ -11,8 +11,7 @@ import (
 	"strings"
 
 	"github.com/cespare/xxhash/v2"
-
-	ipfspath "github.com/ipfs/boxo/path"
+	"github.com/ipfs/boxo/path"
 )
 
 //go:embed *.html *.css
@@ -133,7 +132,7 @@ type Breadcrumb struct {
 func Breadcrumbs(urlPath string, dnslinkOrigin bool) []Breadcrumb {
 	var ret []Breadcrumb
 
-	p, err := ipfspath.NewPath(urlPath)
+	p, err := path.NewPath(urlPath)
 	if err != nil {
 		// No assets.Breadcrumbs, fallback to bare Path in template
 		return ret

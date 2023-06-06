@@ -12,7 +12,7 @@ import (
 	"github.com/dustin/go-humanize"
 	"github.com/ipfs/boxo/files"
 	"github.com/ipfs/boxo/gateway/assets"
-	ipfspath "github.com/ipfs/boxo/path"
+	"github.com/ipfs/boxo/path"
 	cid "github.com/ipfs/go-cid"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
@@ -22,7 +22,7 @@ import (
 // serveDirectory returns the best representation of UnixFS directory
 //
 // It will return index.html if present, or generate directory listing otherwise.
-func (i *handler) serveDirectory(ctx context.Context, w http.ResponseWriter, r *http.Request, resolvedPath ipfspath.ResolvedPath, contentPath ipfspath.Path, isHeadRequest bool, directoryMetadata *directoryMetadata, ranges []ByteRange, begin time.Time, logger *zap.SugaredLogger) bool {
+func (i *handler) serveDirectory(ctx context.Context, w http.ResponseWriter, r *http.Request, resolvedPath path.ResolvedPath, contentPath path.Path, isHeadRequest bool, directoryMetadata *directoryMetadata, ranges []ByteRange, begin time.Time, logger *zap.SugaredLogger) bool {
 	ctx, span := spanTrace(ctx, "Handler.ServeDirectory", trace.WithAttributes(attribute.String("path", resolvedPath.String())))
 	defer span.End()
 
@@ -58,19 +58,19 @@ func (i *handler) serveDirectory(ctx context.Context, w http.ResponseWriter, r *
 	}
 
 	// Check if directory has index.html, if so, serveFile
-	idxPath, err := ipfspath.Join(contentPath, "index.html")
+	idxPath, err := path.Join(contentPath, "index.html")
 	if err != nil {
 		i.webError(w, r, err, http.StatusInternalServerError)
 		return false
 	}
 
-	indexPath, err := ipfspath.Join(resolvedPath, "index.html")
+	indexPath, err := path.Join(resolvedPath, "index.html")
 	if err != nil {
 		i.webError(w, r, err, http.StatusInternalServerError)
 		return false
 	}
 
-	imIndexPath, err := ipfspath.NewImmutablePath(indexPath)
+	imIndexPath, err := path.NewImmutablePath(indexPath)
 	if err != nil {
 		i.webError(w, r, err, http.StatusInternalServerError)
 		return false

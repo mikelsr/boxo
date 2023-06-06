@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/ipfs/boxo/files"
-	ipfspath "github.com/ipfs/boxo/path"
+	"github.com/ipfs/boxo/path"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
@@ -15,7 +15,7 @@ import (
 
 var unixEpochTime = time.Unix(0, 0)
 
-func (i *handler) serveTAR(ctx context.Context, w http.ResponseWriter, r *http.Request, imPath ipfspath.ImmutablePath, contentPath ipfspath.Path, begin time.Time, logger *zap.SugaredLogger) bool {
+func (i *handler) serveTAR(ctx context.Context, w http.ResponseWriter, r *http.Request, imPath path.ImmutablePath, contentPath path.Path, begin time.Time, logger *zap.SugaredLogger) bool {
 	ctx, span := spanTrace(ctx, "Handler.ServeTAR", trace.WithAttributes(attribute.String("path", imPath.String())))
 	defer span.End()
 

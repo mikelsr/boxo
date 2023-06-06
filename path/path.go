@@ -236,7 +236,7 @@ func NewPath(str string) (Path, error) {
 		return &path{
 			str:       cleaned,
 			root:      root,
-			namespace: IPFSNamespace,
+			namespace: IPNSNamespace,
 		}, nil
 	default:
 		return nil, &ErrInvalidPath{error: fmt.Errorf("unknown namespace %q", components[1]), path: str}

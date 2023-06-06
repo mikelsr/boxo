@@ -7,14 +7,14 @@ import (
 	"net/http"
 	"time"
 
-	ipfspath "github.com/ipfs/boxo/path"
+	"github.com/ipfs/boxo/path"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/multierr"
 )
 
 // serveCAR returns a CAR stream for specific DAG+selector
-func (i *handler) serveCAR(ctx context.Context, w http.ResponseWriter, r *http.Request, imPath ipfspath.ImmutablePath, contentPath ipfspath.Path, carVersion string, begin time.Time) bool {
+func (i *handler) serveCAR(ctx context.Context, w http.ResponseWriter, r *http.Request, imPath path.ImmutablePath, contentPath path.Path, carVersion string, begin time.Time) bool {
 	ctx, span := spanTrace(ctx, "Handler.ServeCAR", trace.WithAttributes(attribute.String("path", imPath.String())))
 	defer span.End()
 

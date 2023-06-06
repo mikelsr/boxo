@@ -19,16 +19,16 @@ import (
 	"github.com/ipfs/boxo/files"
 	carblockstore "github.com/ipfs/boxo/ipld/car/v2/blockstore"
 	"github.com/ipfs/boxo/namesys"
-	ipfspath "github.com/ipfs/boxo/path"
+	path "github.com/ipfs/boxo/path"
 	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p/core/crypto"
 	"github.com/libp2p/go-libp2p/core/routing"
 	"github.com/stretchr/testify/assert"
 )
 
-type mockNamesys map[string]ipfspath.Path
+type mockNamesys map[string]path.Path
 
-func (m mockNamesys) Resolve(ctx context.Context, name string, opts ...nsopts.ResolveOpt) (value ipfspath.Path, err error) {
+func (m mockNamesys) Resolve(ctx context.Context, name string, opts ...nsopts.ResolveOpt) (value path.Path, err error) {
 	cfg := nsopts.DefaultResolveOpts()
 	for _, o := range opts {
 		o(&cfg)
@@ -62,7 +62,7 @@ func (m mockNamesys) ResolveAsync(ctx context.Context, name string, opts ...nsop
 	return out
 }
 
-func (m mockNamesys) Publish(ctx context.Context, name crypto.PrivKey, value ipfspath.Path, opts ...nsopts.PublishOption) error {
+func (m mockNamesys) Publish(ctx context.Context, name crypto.PrivKey, value path.Path, opts ...nsopts.PublishOption) error {
 	return errors.New("not implemented for mockNamesys")
 }
 
@@ -107,27 +107,27 @@ func newMockAPI(t *testing.T) (*mockAPI, cid.Cid) {
 	}, cids[0]
 }
 
-func (api *mockAPI) Get(ctx context.Context, immutablePath ipfspath.ImmutablePath, ranges ...ByteRange) (ContentPathMetadata, *GetResponse, error) {
+func (api *mockAPI) Get(ctx context.Context, immutablePath path.ImmutablePath, ranges ...ByteRange) (ContentPathMetadata, *GetResponse, error) {
 	return api.gw.Get(ctx, immutablePath, ranges...)
 }
 
-func (api *mockAPI) GetAll(ctx context.Context, immutablePath ipfspath.ImmutablePath) (ContentPathMetadata, files.Node, error) {
+func (api *mockAPI) GetAll(ctx context.Context, immutablePath path.ImmutablePath) (ContentPathMetadata, files.Node, error) {
 	return api.gw.GetAll(ctx, immutablePath)
 }
 
-func (api *mockAPI) GetBlock(ctx context.Context, immutablePath ipfspath.ImmutablePath) (ContentPathMetadata, files.File, error) {
+func (api *mockAPI) GetBlock(ctx context.Context, immutablePath path.ImmutablePath) (ContentPathMetadata, files.File, error) {
 	return api.gw.GetBlock(ctx, immutablePath)
 }
 
-func (api *mockAPI) Head(ctx context.Context, immutablePath ipfspath.ImmutablePath) (ContentPathMetadata, files.Node, error) {
+func (api *mockAPI) Head(ctx context.Context, immutablePath path.ImmutablePath) (ContentPathMetadata, files.Node, error) {
 	return api.gw.Head(ctx, immutablePath)
 }
 
-func (api *mockAPI) GetCAR(ctx context.Context, immutablePath ipfspath.ImmutablePath) (ContentPathMetadata, io.ReadCloser, <-chan error, error) {
+func (api *mockAPI) GetCAR(ctx context.Context, immutablePath path.ImmutablePath) (ContentPathMetadata, io.ReadCloser, <-chan error, error) {
 	return api.gw.GetCAR(ctx, immutablePath)
 }
 
-func (api *mockAPI) ResolveMutable(ctx context.Context, p ipfspath.Path) (ipfspath.ImmutablePath, error) {
+func (api *mockAPI) ResolveMutable(ctx context.Context, p path.Path) (path.ImmutablePath, error) {
 	return api.gw.ResolveMutable(ctx, p)
 }
 
@@ -135,7 +135,7 @@ func (api *mockAPI) GetIPNSRecord(ctx context.Context, c cid.Cid) ([]byte, error
 	return nil, routing.ErrNotSupported
 }
 
-func (api *mockAPI) GetDNSLinkRecord(ctx context.Context, hostname string) (ipfspath.Path, error) {
+func (api *mockAPI) GetDNSLinkRecord(ctx context.Context, hostname string) (path.Path, error) {
 	if api.namesys != nil {
 		p, err := api.namesys.Resolve(ctx, "/ipns/"+hostname, nsopts.Depth(1))
 		if err == namesys.ErrResolveRecursion {
@@ -147,16 +147,16 @@ func (api *mockAPI) GetDNSLinkRecord(ctx context.Context, hostname string) (ipfs
 	return nil, errors.New("not implemented")
 }
 
-func (api *mockAPI) IsCached(ctx context.Context, p ipfspath.Path) bool {
+func (api *mockAPI) IsCached(ctx context.Context, p path.Path) bool {
 	return api.gw.IsCached(ctx, p)
 }
 
-func (api *mockAPI) ResolvePath(ctx context.Context, immutablePath ipfspath.ImmutablePath) (ContentPathMetadata, error) {
+func (api *mockAPI) ResolvePath(ctx context.Context, immutablePath path.ImmutablePath) (ContentPathMetadata, error) {
 	return api.gw.ResolvePath(ctx, immutablePath)
 }
 
-func (api *mockAPI) resolvePathNoRootsReturned(ctx context.Context, ip ipfspath.Path) (ipfspath.ResolvedPath, error) {
-	var imPath ipfspath.ImmutablePath
+func (api *mockAPI) resolvePathNoRootsReturned(ctx context.Context, ip path.Path) (path.ResolvedPath, error) {
+	var imPath path.ImmutablePath
 	var err error
 	if ip.Mutable() {
 		imPath, err = api.ResolveMutable(ctx, ip)
@@ -164,7 +164,7 @@ func (api *mockAPI) resolvePathNoRootsReturned(ctx context.Context, ip ipfspath.
 			return nil, err
 		}
 	} else {
-		imPath, err = ipfspath.NewImmutablePath(ip)
+		imPath, err = path.NewImmutablePath(ip)
 		if err != nil {
 			return nil, err
 		}
@@ -231,17 +231,17 @@ func TestGatewayGet(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	p, err := ipfspath.Join(ipfspath.NewIPFSPath(root), t.Name(), "fnord")
+	p, err := path.Join(path.NewIPFSPath(root), t.Name(), "fnord")
 	assert.NoError(t, err)
 
 	k, err := api.resolvePathNoRootsReturned(ctx, p)
 	assert.NoError(t, err)
 
-	api.namesys["/ipns/example.com"] = ipfspath.NewIPFSPath(k.Cid())
+	api.namesys["/ipns/example.com"] = path.NewIPFSPath(k.Cid())
 	api.namesys["/ipns/working.example.com"] = k
-	api.namesys["/ipns/double.example.com"] = ipfspath.NewDNSLinkPath("working.example.com")
-	api.namesys["/ipns/triple.example.com"] = ipfspath.NewDNSLinkPath("double.example.com")
-	api.namesys["/ipns/broken.example.com"] = ipfspath.NewDNSLinkPath(k.Cid().String())
+	api.namesys["/ipns/double.example.com"] = path.NewDNSLinkPath("working.example.com")
+	api.namesys["/ipns/triple.example.com"] = path.NewDNSLinkPath("double.example.com")
+	api.namesys["/ipns/broken.example.com"] = path.NewDNSLinkPath(k.Cid().String())
 	// We picked .man because:
 	// 1. It's a valid TLD.
 	// 2. Go treats it as the file extension for "man" files (even though
@@ -343,7 +343,7 @@ func TestIPNSHostnameRedirect(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	p, err := ipfspath.Join(ipfspath.NewIPFSPath(root), t.Name())
+	p, err := path.Join(path.NewIPFSPath(root), t.Name())
 	assert.NoError(t, err)
 
 	k, err := api.resolvePathNoRootsReturned(ctx, p)
@@ -401,19 +401,19 @@ func TestIPNSHostnameBacklinks(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	p, err := ipfspath.Join(ipfspath.NewIPFSPath(root), t.Name())
+	p, err := path.Join(path.NewIPFSPath(root), t.Name())
 	assert.NoError(t, err)
 
 	k, err := api.resolvePathNoRootsReturned(ctx, p)
 	assert.NoError(t, err)
 
 	// create /ipns/example.net/foo/
-	p2, err := ipfspath.Join(k, "foo? #<'")
+	p2, err := path.Join(k, "foo? #<'")
 	assert.NoError(t, err)
 	k2, err := api.resolvePathNoRootsReturned(ctx, p2)
 	assert.NoError(t, err)
 
-	p3, err := ipfspath.Join(k, "foo? #<'/bar")
+	p3, err := path.Join(k, "foo? #<'/bar")
 	assert.NoError(t, err)
 	k3, err := api.resolvePathNoRootsReturned(ctx, p3)
 	assert.NoError(t, err)
@@ -492,7 +492,7 @@ func TestPretty404(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	p, err := ipfspath.Join(ipfspath.NewIPFSPath(root), t.Name())
+	p, err := path.Join(path.NewIPFSPath(root), t.Name())
 	assert.NoError(t, err)
 
 	k, err := api.resolvePathNoRootsReturned(ctx, p)
@@ -716,8 +716,8 @@ func TestIpfsTrustlessMode(t *testing.T) {
 
 func TestIpnsTrustlessMode(t *testing.T) {
 	api, root := newMockAPI(t)
-	api.namesys["/ipns/trustless.com"] = ipfspath.NewIPFSPath(root)
-	api.namesys["/ipns/trusted.com"] = ipfspath.NewIPFSPath(root)
+	api.namesys["/ipns/trustless.com"] = path.NewIPFSPath(root)
+	api.namesys["/ipns/trusted.com"] = path.NewIPFSPath(root)
 
 	ts := newTestServerWithConfig(t, api, Config{
 		Headers:   map[string][]string{},
@@ -779,7 +779,7 @@ func TestDagJsonCborPreview(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	p, err := ipfspath.Join(ipfspath.NewIPFSPath(root), t.Name(), "example")
+	p, err := path.Join(path.NewIPFSPath(root), t.Name(), "example")
 	assert.NoError(t, err)
 
 	resolvedPath, err := api.resolvePathNoRootsReturned(ctx, p)

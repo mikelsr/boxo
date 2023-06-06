@@ -9,7 +9,7 @@ import (
 	"github.com/ipfs/boxo/files"
 	"github.com/ipfs/boxo/gateway/assets"
 	"github.com/ipfs/boxo/ipld/unixfs"
-	ipfspath "github.com/ipfs/boxo/path"
+	"github.com/ipfs/boxo/path"
 	"github.com/ipfs/go-cid"
 )
 
@@ -87,7 +87,7 @@ type Specification struct {
 
 type ContentPathMetadata struct {
 	PathSegmentRoots []cid.Cid
-	LastSegment      ipfspath.ResolvedPath
+	LastSegment      path.ResolvedPath
 	ContentType      string // Only used for UnixFS requests
 }
 
@@ -142,36 +142,36 @@ type IPFSBackend interface {
 	//   - A range request for a directory currently holds no semantic meaning.
 	//
 	// [HTTP Byte Ranges]: https://httpwg.org/specs/rfc9110.html#rfc.section.14.1.2
-	Get(context.Context, ipfspath.ImmutablePath, ...ByteRange) (ContentPathMetadata, *GetResponse, error)
+	Get(context.Context, path.ImmutablePath, ...ByteRange) (ContentPathMetadata, *GetResponse, error)
 
 	// GetAll returns a UnixFS file or directory depending on what the path is that has been requested. Directories should
 	// include all content recursively.
-	GetAll(context.Context, ipfspath.ImmutablePath) (ContentPathMetadata, files.Node, error)
+	GetAll(context.Context, path.ImmutablePath) (ContentPathMetadata, files.Node, error)
 
 	// GetBlock returns a single block of data
-	GetBlock(context.Context, ipfspath.ImmutablePath) (ContentPathMetadata, files.File, error)
+	GetBlock(context.Context, path.ImmutablePath) (ContentPathMetadata, files.File, error)
 
 	// Head returns a file or directory depending on what the path is that has been requested.
 	// For UnixFS files should return a file which has the correct file size and either returns the ContentType in ContentPathMetadata or
 	// enough data (e.g. 3kiB) such that the content type can be determined by sniffing.
 	// For all other data types returning just size information is sufficient
 	// TODO: give function more explicit return types
-	Head(context.Context, ipfspath.ImmutablePath) (ContentPathMetadata, files.Node, error)
+	Head(context.Context, path.ImmutablePath) (ContentPathMetadata, files.Node, error)
 
 	// ResolvePath resolves the path using UnixFS resolver. If the path does not
 	// exist due to a missing link, it should return an error of type:
 	// NewErrorResponse(fmt.Errorf("no link named %q under %s", name, cid), http.StatusNotFound)
-	ResolvePath(context.Context, ipfspath.ImmutablePath) (ContentPathMetadata, error)
+	ResolvePath(context.Context, path.ImmutablePath) (ContentPathMetadata, error)
 
 	// GetCAR returns a CAR file for the given immutable path
 	// Returns an initial error if there was an issue before the CAR streaming begins as well as a channel with a single
 	// that may contain a single error for if any errors occur during the streaming. If there was an initial error the
 	// error channel is nil
 	// TODO: Make this function signature better
-	GetCAR(context.Context, ipfspath.ImmutablePath) (ContentPathMetadata, io.ReadCloser, <-chan error, error)
+	GetCAR(context.Context, path.ImmutablePath) (ContentPathMetadata, io.ReadCloser, <-chan error, error)
 
 	// IsCached returns whether or not the path exists locally.
-	IsCached(context.Context, ipfspath.Path) bool
+	IsCached(context.Context, path.Path) bool
 
 	// GetIPNSRecord retrieves the best IPNS record for a given CID (libp2p-key)
 	// from the routing system.
@@ -182,13 +182,13 @@ type IPFSBackend interface {
 	//
 	// For example, given a mapping from `/ipns/dnslink.tld -> /ipns/ipns-id/mydirectory` and `/ipns/ipns-id` to
 	// `/ipfs/some-cid`, the result of passing `/ipns/dnslink.tld/myfile` would be `/ipfs/some-cid/mydirectory/myfile`.
-	ResolveMutable(context.Context, ipfspath.Path) (ipfspath.ImmutablePath, error)
+	ResolveMutable(context.Context, path.Path) (path.ImmutablePath, error)
 
 	// GetDNSLinkRecord returns the DNSLink TXT record for the provided FQDN.
 	// Unlike ResolvePath, it does not perform recursive resolution. It only
 	// checks for the existence of a DNSLink TXT record with path starting with
 	// /ipfs/ or /ipns/ and returns the path as-is.
-	GetDNSLinkRecord(context.Context, string) (ipfspath.Path, error)
+	GetDNSLinkRecord(context.Context, string) (path.Path, error)
 }
 
 // A helper function to clean up a set of headers:
