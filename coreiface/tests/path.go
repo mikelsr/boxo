@@ -6,11 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ipfs/boxo/coreiface/path"
-
 	"github.com/ipfs/boxo/coreiface/options"
-
+	"github.com/ipfs/boxo/path"
 	ipldcbor "github.com/ipfs/go-ipld-cbor"
+	"github.com/stretchr/testify/require"
 )
 
 func (tp *TestSuite) TestPath(t *testing.T) {
@@ -76,7 +75,12 @@ func (tp *TestSuite) TestPathRemainder(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	rp1, err := api.ResolvePath(ctx, path.New(nd.String()+"/foo/bar"))
+	p, err := path.NewPath(nd.String() + "/foo/bar")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rp1, err := api.ResolvePath(ctx, p)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -107,7 +111,7 @@ func (tp *TestSuite) TestEmptyPathRemainder(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	rp1, err := api.ResolvePath(ctx, path.New(nd.Cid().String()))
+	rp1, err := api.ResolvePath(ctx, path.NewIPFSPath(nd.Cid()))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -138,7 +142,12 @@ func (tp *TestSuite) TestInvalidPathRemainder(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	_, err = api.ResolvePath(ctx, path.New("/ipld/"+nd.Cid().String()+"/bar/baz"))
+	p, err := path.Join(path.NewIPLDPath(nd.Cid()), "/bar/baz")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = api.ResolvePath(ctx, p)
 	if err == nil || !strings.Contains(err.Error(), `no link named "bar"`) {
 		t.Fatalf("unexpected error: %s", err)
 	}
@@ -174,7 +183,12 @@ func (tp *TestSuite) TestPathRoot(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	rp, err := api.ResolvePath(ctx, path.New("/ipld/"+nd.Cid().String()+"/foo"))
+	p, err := path.Join(path.NewIPLDPath(nd.Cid()), "/foo")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rp, err := api.ResolvePath(ctx, p)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -189,9 +203,11 @@ func (tp *TestSuite) TestPathRoot(t *testing.T) {
 }
 
 func (tp *TestSuite) TestPathJoin(t *testing.T) {
-	p1 := path.New("/ipfs/QmYNmQKp6SuaVrpgWRsPTgCQCnpxUYGq76YEKBXuj2N4H6/bar/baz")
+	p1, err := path.NewPath("/ipfs/QmYNmQKp6SuaVrpgWRsPTgCQCnpxUYGq76YEKBXuj2N4H6/bar/baz")
+	require.NoError(t, err)
 
-	if path.Join(p1, "foo").String() != "/ipfs/QmYNmQKp6SuaVrpgWRsPTgCQCnpxUYGq76YEKBXuj2N4H6/bar/baz/foo" {
-		t.Error("unexpected path")
-	}
+	p2, err := path.Join(p1, "foo")
+	require.NoError(t, err)
+
+	require.Equal(t, "/ipfs/QmYNmQKp6SuaVrpgWRsPTgCQCnpxUYGq76YEKBXuj2N4H6/bar/baz/foo", p2.String())
 }

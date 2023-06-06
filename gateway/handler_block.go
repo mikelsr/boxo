@@ -5,13 +5,13 @@ import (
 	"net/http"
 	"time"
 
-	ipath "github.com/ipfs/boxo/coreiface/path"
+	ipfspath "github.com/ipfs/boxo/path"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 )
 
 // serveRawBlock returns bytes behind a raw block
-func (i *handler) serveRawBlock(ctx context.Context, w http.ResponseWriter, r *http.Request, imPath ImmutablePath, contentPath ipath.Path, begin time.Time) bool {
+func (i *handler) serveRawBlock(ctx context.Context, w http.ResponseWriter, r *http.Request, imPath ipfspath.ImmutablePath, contentPath ipfspath.Path, begin time.Time) bool {
 	ctx, span := spanTrace(ctx, "Handler.ServeRawBlock", trace.WithAttributes(attribute.String("path", imPath.String())))
 	defer span.End()
 

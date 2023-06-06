@@ -125,7 +125,7 @@ func TestAsyncDS(t *testing.T) {
 	publisher := NewIpnsPublisher(rt, ds)
 
 	ipnsFakeID := testutil.RandIdentityOrFatal(t)
-	ipnsVal, err := path.ParsePath("/ipns/foo.bar")
+	ipnsVal, err := path.NewPath("/ipns/foo.bar")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -25,8 +25,12 @@ func TestRoutingResolve(t *testing.T) {
 
 	identity := tnet.RandIdentityOrFatal(t)
 
-	h := path.FromString("/ipfs/QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN")
-	err := publisher.Publish(context.Background(), identity.PrivateKey(), h)
+	h, err := path.NewPath("/ipfs/QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = publisher.Publish(context.Background(), identity.PrivateKey(), h)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -36,7 +40,7 @@ func TestRoutingResolve(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if res != h {
+	if res.String() != h.String() {
 		t.Fatal("Got back incorrect value.")
 	}
 }
@@ -51,10 +55,13 @@ func TestPrexistingExpiredRecord(t *testing.T) {
 	identity := tnet.RandIdentityOrFatal(t)
 
 	// Make an expired record and put it in the datastore
-	h := path.FromString("/ipfs/QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN")
+	h, err := path.NewPath("/ipfs/QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN")
+	if err != nil {
+		t.Fatal(err)
+	}
 	eol := time.Now().Add(time.Hour * -1)
 
-	entry, err := ipns.Create(identity.PrivateKey(), []byte(h), 0, eol, 0)
+	entry, err := ipns.Create(identity.PrivateKey(), []byte(h.String()), 0, eol, 0)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -85,9 +92,12 @@ func TestPrexistingRecord(t *testing.T) {
 	identity := tnet.RandIdentityOrFatal(t)
 
 	// Make a good record and put it in the datastore
-	h := path.FromString("/ipfs/QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN")
+	h, err := path.NewPath("/ipfs/QmZULkCELmmk5XNfCgTnCyFgAVxBRBXyDHGGMVoLFLiXEN")
+	if err != nil {
+		t.Fatal(err)
+	}
 	eol := time.Now().Add(time.Hour)
-	entry, err := ipns.Create(identity.PrivateKey(), []byte(h), 0, eol, 0)
+	entry, err := ipns.Create(identity.PrivateKey(), []byte(h.String()), 0, eol, 0)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -114,7 +124,7 @@ func verifyCanResolve(r Resolver, name string, exp path.Path) error {
 		return err
 	}
 
-	if res != exp {
+	if res.String() != exp.String() {
 		return errors.New("got back wrong record")
 	}
 

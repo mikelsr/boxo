@@ -8,7 +8,6 @@ import (
 	opts "github.com/ipfs/boxo/coreiface/options/namesys"
 	"github.com/ipfs/boxo/ipns"
 	ipns_pb "github.com/ipfs/boxo/ipns/pb"
-	"github.com/ipfs/boxo/path"
 	mockrouting "github.com/ipfs/boxo/routing/mock"
 	"github.com/ipfs/boxo/routing/offline"
 	ds "github.com/ipfs/go-datastore"
@@ -76,7 +75,7 @@ func testResolverValidation(t *testing.T, keyType int) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if resp != path.Path(p) {
+	if resp.String() != string(p) {
 		t.Fatalf("Mismatch between published path %s and resolved path %s", p, resp)
 	}
 	// Create expired entry

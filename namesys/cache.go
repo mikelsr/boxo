@@ -16,12 +16,12 @@ func (ns *mpns) cacheGet(name string) (path.Path, bool) {
 	}
 
 	if ns.cache == nil {
-		return "", false
+		return nil, false
 	}
 
 	ientry, ok := ns.cache.Get(name)
 	if !ok {
-		return "", false
+		return nil, false
 	}
 
 	entry, ok := ientry.(cacheEntry)
@@ -36,7 +36,7 @@ func (ns *mpns) cacheGet(name string) (path.Path, bool) {
 
 	ns.cache.Remove(name)
 
-	return "", false
+	return nil, false
 }
 
 func (ns *mpns) cacheSet(name string, val path.Path, ttl time.Duration) {

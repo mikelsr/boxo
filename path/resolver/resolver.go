@@ -83,7 +83,7 @@ func (r *basicResolver) ResolveToLastNode(ctx context.Context, fpath path.Path) 
 	ctx, span := internal.StartSpan(ctx, "basicResolver.ResolveToLastNode", trace.WithAttributes(attribute.Stringer("Path", fpath)))
 	defer span.End()
 
-	c, p, err := path.SplitAbsPath(fpath)
+	c, p, err := path.SplitImmutablePath(fpath)
 	if err != nil {
 		return cid.Cid{}, nil, err
 	}
@@ -152,12 +152,7 @@ func (r *basicResolver) ResolvePath(ctx context.Context, fpath path.Path) (ipld.
 	ctx, span := internal.StartSpan(ctx, "basicResolver.ResolvePath", trace.WithAttributes(attribute.Stringer("Path", fpath)))
 	defer span.End()
 
-	// validate path
-	if err := fpath.IsValid(); err != nil {
-		return nil, nil, err
-	}
-
-	c, p, err := path.SplitAbsPath(fpath)
+	c, p, err := path.SplitImmutablePath(fpath)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -194,19 +189,11 @@ func (r *basicResolver) ResolvePathComponents(ctx context.Context, fpath path.Pa
 	ctx, span := internal.StartSpan(ctx, "basicResolver.ResolvePathComponents", trace.WithAttributes(attribute.Stringer("Path", fpath)))
 	defer span.End()
 
-	//lint:ignore SA1019 TODO: replace EventBegin
-	evt := log.EventBegin(ctx, "resolvePathComponents", logging.LoggableMap{"fpath": fpath})
-	defer evt.Done()
+	log.Infow("resolvePathComponents", "fpath", fpath)
 
-	// validate path
-	if err := fpath.IsValid(); err != nil {
-		evt.Append(logging.LoggableMap{"error": err.Error()})
-		return nil, err
-	}
-
-	c, p, err := path.SplitAbsPath(fpath)
+	c, p, err := path.SplitImmutablePath(fpath)
 	if err != nil {
-		evt.Append(logging.LoggableMap{"error": err.Error()})
+		log.Error(err.Error())
 		return nil, err
 	}
 
@@ -215,7 +202,7 @@ func (r *basicResolver) ResolvePathComponents(ctx context.Context, fpath path.Pa
 
 	nodes, _, _, err := r.resolveNodes(ctx, c, pathSelector)
 	if err != nil {
-		evt.Append(logging.LoggableMap{"error": err.Error()})
+		log.Error(err.Error())
 	}
 
 	return nodes, err
@@ -235,9 +222,7 @@ func (r *basicResolver) ResolveLinks(ctx context.Context, ndd ipld.Node, names [
 	ctx, span := internal.StartSpan(ctx, "basicResolver.ResolveLinks")
 	defer span.End()
 
-	//lint:ignore SA1019 TODO: replace EventBegin
-	evt := log.EventBegin(ctx, "resolveLinks", logging.LoggableMap{"names": names})
-	defer evt.Done()
+	log.Infow("resolveLinks", "names", names)
 
 	// create a selector to traverse and match all path segments
 	pathSelector := pathAllSelector(names)
@@ -251,7 +236,7 @@ func (r *basicResolver) ResolveLinks(ctx context.Context, ndd ipld.Node, names [
 		return nil
 	})
 	if err != nil {
-		evt.Append(logging.LoggableMap{"error": err.Error()})
+		log.Error(err.Error())
 		return nil, err
 	}
 

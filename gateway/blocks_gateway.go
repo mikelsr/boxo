@@ -14,7 +14,6 @@ import (
 	"github.com/ipfs/boxo/blockservice"
 	blockstore "github.com/ipfs/boxo/blockstore"
 	nsopts "github.com/ipfs/boxo/coreiface/options/namesys"
-	ifacepath "github.com/ipfs/boxo/coreiface/path"
 	bsfetcher "github.com/ipfs/boxo/fetcher/impl/blockservice"
 	"github.com/ipfs/boxo/files"
 	"github.com/ipfs/boxo/ipld/car"
@@ -139,7 +138,7 @@ func NewBlocksGateway(blockService blockservice.BlockService, opts ...BlockGatew
 	}, nil
 }
 
-func (api *BlocksGateway) Get(ctx context.Context, path ImmutablePath, ranges ...ByteRange) (ContentPathMetadata, *GetResponse, error) {
+func (api *BlocksGateway) Get(ctx context.Context, path ipfspath.ImmutablePath, ranges ...ByteRange) (ContentPathMetadata, *GetResponse, error) {
 	md, nd, err := api.getNode(ctx, path)
 	if err != nil {
 		return md, nil, err
@@ -180,7 +179,7 @@ func (api *BlocksGateway) Get(ctx context.Context, path ImmutablePath, ranges ..
 	return ContentPathMetadata{}, nil, fmt.Errorf("data was not a valid file or directory: %w", ErrInternalServerError) // TODO: should there be a gateway invalid content type to abstract over the various IPLD error types?
 }
 
-func (api *BlocksGateway) GetAll(ctx context.Context, path ImmutablePath) (ContentPathMetadata, files.Node, error) {
+func (api *BlocksGateway) GetAll(ctx context.Context, path ipfspath.ImmutablePath) (ContentPathMetadata, files.Node, error) {
 	md, nd, err := api.getNode(ctx, path)
 	if err != nil {
 		return md, nil, err
@@ -194,7 +193,7 @@ func (api *BlocksGateway) GetAll(ctx context.Context, path ImmutablePath) (Conte
 	return md, n, nil
 }
 
-func (api *BlocksGateway) GetBlock(ctx context.Context, path ImmutablePath) (ContentPathMetadata, files.File, error) {
+func (api *BlocksGateway) GetBlock(ctx context.Context, path ipfspath.ImmutablePath) (ContentPathMetadata, files.File, error) {
 	md, nd, err := api.getNode(ctx, path)
 	if err != nil {
 		return md, nil, err
@@ -203,7 +202,7 @@ func (api *BlocksGateway) GetBlock(ctx context.Context, path ImmutablePath) (Con
 	return md, files.NewBytesFile(nd.RawData()), nil
 }
 
-func (api *BlocksGateway) Head(ctx context.Context, path ImmutablePath) (ContentPathMetadata, files.Node, error) {
+func (api *BlocksGateway) Head(ctx context.Context, path ipfspath.ImmutablePath) (ContentPathMetadata, files.Node, error) {
 	md, nd, err := api.getNode(ctx, path)
 	if err != nil {
 		return md, nil, err
@@ -223,7 +222,7 @@ func (api *BlocksGateway) Head(ctx context.Context, path ImmutablePath) (Content
 	return md, fileNode, nil
 }
 
-func (api *BlocksGateway) GetCAR(ctx context.Context, path ImmutablePath) (ContentPathMetadata, io.ReadCloser, <-chan error, error) {
+func (api *BlocksGateway) GetCAR(ctx context.Context, path ipfspath.ImmutablePath) (ContentPathMetadata, io.ReadCloser, <-chan error, error) {
 	// Same go-car settings as dag.export command
 	store := dagStore{api: api, ctx: ctx}
 
@@ -257,7 +256,7 @@ func (api *BlocksGateway) GetCAR(ctx context.Context, path ImmutablePath) (Conte
 	return md, r, errCh, nil
 }
 
-func (api *BlocksGateway) getNode(ctx context.Context, path ImmutablePath) (ContentPathMetadata, format.Node, error) {
+func (api *BlocksGateway) getNode(ctx context.Context, path ipfspath.ImmutablePath) (ContentPathMetadata, format.Node, error) {
 	roots, lastSeg, err := api.getPathRoots(ctx, path)
 	if err != nil {
 		return ContentPathMetadata{}, nil, err
@@ -278,7 +277,7 @@ func (api *BlocksGateway) getNode(ctx context.Context, path ImmutablePath) (Cont
 	return md, nd, err
 }
 
-func (api *BlocksGateway) getPathRoots(ctx context.Context, contentPath ImmutablePath) ([]cid.Cid, ifacepath.Resolved, error) {
+func (api *BlocksGateway) getPathRoots(ctx context.Context, contentPath ipfspath.ImmutablePath) ([]cid.Cid, ipfspath.ResolvedPath, error) {
 	/*
 		These are logical roots where each CID represent one path segment
 		and resolves to either a directory or the root block of a file.
@@ -302,14 +301,18 @@ func (api *BlocksGateway) getPathRoots(ctx context.Context, contentPath Immutabl
 	contentPathStr := contentPath.String()
 	pathSegments := strings.Split(contentPathStr[6:], "/")
 	sp.WriteString(contentPathStr[:5]) // /ipfs or /ipns
-	var lastPath ifacepath.Resolved
+	var lastPath ipfspath.ResolvedPath
 	for _, root := range pathSegments {
 		if root == "" {
 			continue
 		}
 		sp.WriteString("/")
 		sp.WriteString(root)
-		resolvedSubPath, err := api.resolvePath(ctx, ifacepath.New(sp.String()))
+		p, err := ipfspath.NewPath(sp.String())
+		if err != nil {
+			return nil, nil, err
+		}
+		resolvedSubPath, err := api.resolvePath(ctx, p)
 		if err != nil {
 			// TODO: should we be more explicit here and is this part of the Gateway API contract?
 			// The issue here was that we returned datamodel.ErrWrongKind instead of this resolver error
@@ -336,32 +339,26 @@ func (ds dagStore) Get(_ context.Context, c cid.Cid) (blocks.Block, error) {
 	return ds.api.blockService.GetBlock(ds.ctx, c)
 }
 
-func (api *BlocksGateway) ResolveMutable(ctx context.Context, p ifacepath.Path) (ImmutablePath, error) {
-	err := p.IsValid()
-	if err != nil {
-		return ImmutablePath{}, err
-	}
-
-	ipath := ipfspath.Path(p.String())
+func (api *BlocksGateway) ResolveMutable(ctx context.Context, ipath ipfspath.Path) (ipfspath.ImmutablePath, error) {
 	switch ipath.Segments()[0] {
 	case "ipns":
-		ipath, err = resolve.ResolveIPNS(ctx, api.namesys, ipath)
+		ipath, err := resolve.ResolveIPNS(ctx, api.namesys, ipath)
 		if err != nil {
-			return ImmutablePath{}, err
+			return ipfspath.ImmutablePath{}, err
 		}
-		imPath, err := NewImmutablePath(ifacepath.New(ipath.String()))
+		imPath, err := ipfspath.NewImmutablePath(ipath)
 		if err != nil {
-			return ImmutablePath{}, err
+			return ipfspath.ImmutablePath{}, err
 		}
 		return imPath, nil
 	case "ipfs":
-		imPath, err := NewImmutablePath(ifacepath.New(ipath.String()))
+		imPath, err := ipfspath.NewImmutablePath(ipath)
 		if err != nil {
-			return ImmutablePath{}, err
+			return ipfspath.ImmutablePath{}, err
 		}
 		return imPath, nil
 	default:
-		return ImmutablePath{}, NewErrorResponse(fmt.Errorf("unsupported path namespace: %s", p.Namespace()), http.StatusNotImplemented)
+		return ipfspath.ImmutablePath{}, NewErrorResponse(fmt.Errorf("unsupported path namespace: %s", ipath.Namespace()), http.StatusNotImplemented)
 	}
 }
 
@@ -385,19 +382,19 @@ func (api *BlocksGateway) GetIPNSRecord(ctx context.Context, c cid.Cid) ([]byte,
 	return api.routing.GetValue(ctx, "/ipns/"+string(id))
 }
 
-func (api *BlocksGateway) GetDNSLinkRecord(ctx context.Context, hostname string) (ifacepath.Path, error) {
+func (api *BlocksGateway) GetDNSLinkRecord(ctx context.Context, hostname string) (ipfspath.Path, error) {
 	if api.namesys != nil {
 		p, err := api.namesys.Resolve(ctx, "/ipns/"+hostname, nsopts.Depth(1))
 		if err == namesys.ErrResolveRecursion {
 			err = nil
 		}
-		return ifacepath.New(p.String()), err
+		return p, err
 	}
 
 	return nil, NewErrorResponse(errors.New("not implemented"), http.StatusNotImplemented)
 }
 
-func (api *BlocksGateway) IsCached(ctx context.Context, p ifacepath.Path) bool {
+func (api *BlocksGateway) IsCached(ctx context.Context, p ipfspath.Path) bool {
 	rp, err := api.resolvePath(ctx, p)
 	if err != nil {
 		return false
@@ -407,7 +404,7 @@ func (api *BlocksGateway) IsCached(ctx context.Context, p ifacepath.Path) bool {
 	return has
 }
 
-func (api *BlocksGateway) ResolvePath(ctx context.Context, path ImmutablePath) (ContentPathMetadata, error) {
+func (api *BlocksGateway) ResolvePath(ctx context.Context, path ipfspath.ImmutablePath) (ContentPathMetadata, error) {
 	roots, lastSeg, err := api.getPathRoots(ctx, path)
 	if err != nil {
 		return ContentPathMetadata{}, err
@@ -419,17 +416,13 @@ func (api *BlocksGateway) ResolvePath(ctx context.Context, path ImmutablePath) (
 	return md, nil
 }
 
-func (api *BlocksGateway) resolvePath(ctx context.Context, p ifacepath.Path) (ifacepath.Resolved, error) {
-	if _, ok := p.(ifacepath.Resolved); ok {
-		return p.(ifacepath.Resolved), nil
+func (api *BlocksGateway) resolvePath(ctx context.Context, ipath ipfspath.Path) (ipfspath.ResolvedPath, error) {
+	if _, ok := ipath.(ipfspath.ResolvedPath); ok {
+		return ipath.(ipfspath.ResolvedPath), nil
 	}
 
-	err := p.IsValid()
-	if err != nil {
-		return nil, err
-	}
+	var err error
 
-	ipath := ipfspath.Path(p.String())
 	if ipath.Segments()[0] == "ipns" {
 		ipath, err = resolve.ResolveIPNS(ctx, api.namesys, ipath)
 		if err != nil {
@@ -438,7 +431,7 @@ func (api *BlocksGateway) resolvePath(ctx context.Context, p ifacepath.Path) (if
 	}
 
 	if ipath.Segments()[0] != "ipfs" {
-		return nil, fmt.Errorf("unsupported path namespace: %s", p.Namespace())
+		return nil, fmt.Errorf("unsupported path namespace: %s", ipath.Namespace())
 	}
 
 	node, rest, err := api.resolver.ResolveToLastNode(ctx, ipath)
@@ -446,10 +439,5 @@ func (api *BlocksGateway) resolvePath(ctx context.Context, p ifacepath.Path) (if
 		return nil, err
 	}
 
-	root, err := cid.Parse(ipath.Segments()[1])
-	if err != nil {
-		return nil, err
-	}
-
-	return ifacepath.NewResolvedPath(ipath, node, root, gopath.Join(rest...)), nil
+	return ipfspath.NewResolvedPath(ipath, node, gopath.Join(rest...)), nil
 }

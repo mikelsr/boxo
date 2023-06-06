@@ -15,21 +15,20 @@ import (
 
 	"github.com/ipfs/boxo/blockservice"
 	nsopts "github.com/ipfs/boxo/coreiface/options/namesys"
-	ipath "github.com/ipfs/boxo/coreiface/path"
 	offline "github.com/ipfs/boxo/exchange/offline"
 	"github.com/ipfs/boxo/files"
 	carblockstore "github.com/ipfs/boxo/ipld/car/v2/blockstore"
 	"github.com/ipfs/boxo/namesys"
-	path "github.com/ipfs/boxo/path"
+	ipfspath "github.com/ipfs/boxo/path"
 	"github.com/ipfs/go-cid"
 	"github.com/libp2p/go-libp2p/core/crypto"
 	"github.com/libp2p/go-libp2p/core/routing"
 	"github.com/stretchr/testify/assert"
 )
 
-type mockNamesys map[string]path.Path
+type mockNamesys map[string]ipfspath.Path
 
-func (m mockNamesys) Resolve(ctx context.Context, name string, opts ...nsopts.ResolveOpt) (value path.Path, err error) {
+func (m mockNamesys) Resolve(ctx context.Context, name string, opts ...nsopts.ResolveOpt) (value ipfspath.Path, err error) {
 	cfg := nsopts.DefaultResolveOpts()
 	for _, o := range opts {
 		o(&cfg)
@@ -48,7 +47,7 @@ func (m mockNamesys) Resolve(ctx context.Context, name string, opts ...nsopts.Re
 		var ok bool
 		value, ok = m[name]
 		if !ok {
-			return "", namesys.ErrResolveFailed
+			return nil, namesys.ErrResolveFailed
 		}
 		name = value.String()
 	}
@@ -63,7 +62,7 @@ func (m mockNamesys) ResolveAsync(ctx context.Context, name string, opts ...nsop
 	return out
 }
 
-func (m mockNamesys) Publish(ctx context.Context, name crypto.PrivKey, value path.Path, opts ...nsopts.PublishOption) error {
+func (m mockNamesys) Publish(ctx context.Context, name crypto.PrivKey, value ipfspath.Path, opts ...nsopts.PublishOption) error {
 	return errors.New("not implemented for mockNamesys")
 }
 
@@ -108,27 +107,27 @@ func newMockAPI(t *testing.T) (*mockAPI, cid.Cid) {
 	}, cids[0]
 }
 
-func (api *mockAPI) Get(ctx context.Context, immutablePath ImmutablePath, ranges ...ByteRange) (ContentPathMetadata, *GetResponse, error) {
+func (api *mockAPI) Get(ctx context.Context, immutablePath ipfspath.ImmutablePath, ranges ...ByteRange) (ContentPathMetadata, *GetResponse, error) {
 	return api.gw.Get(ctx, immutablePath, ranges...)
 }
 
-func (api *mockAPI) GetAll(ctx context.Context, immutablePath ImmutablePath) (ContentPathMetadata, files.Node, error) {
+func (api *mockAPI) GetAll(ctx context.Context, immutablePath ipfspath.ImmutablePath) (ContentPathMetadata, files.Node, error) {
 	return api.gw.GetAll(ctx, immutablePath)
 }
 
-func (api *mockAPI) GetBlock(ctx context.Context, immutablePath ImmutablePath) (ContentPathMetadata, files.File, error) {
+func (api *mockAPI) GetBlock(ctx context.Context, immutablePath ipfspath.ImmutablePath) (ContentPathMetadata, files.File, error) {
 	return api.gw.GetBlock(ctx, immutablePath)
 }
 
-func (api *mockAPI) Head(ctx context.Context, immutablePath ImmutablePath) (ContentPathMetadata, files.Node, error) {
+func (api *mockAPI) Head(ctx context.Context, immutablePath ipfspath.ImmutablePath) (ContentPathMetadata, files.Node, error) {
 	return api.gw.Head(ctx, immutablePath)
 }
 
-func (api *mockAPI) GetCAR(ctx context.Context, immutablePath ImmutablePath) (ContentPathMetadata, io.ReadCloser, <-chan error, error) {
+func (api *mockAPI) GetCAR(ctx context.Context, immutablePath ipfspath.ImmutablePath) (ContentPathMetadata, io.ReadCloser, <-chan error, error) {
 	return api.gw.GetCAR(ctx, immutablePath)
 }
 
-func (api *mockAPI) ResolveMutable(ctx context.Context, p ipath.Path) (ImmutablePath, error) {
+func (api *mockAPI) ResolveMutable(ctx context.Context, p ipfspath.Path) (ipfspath.ImmutablePath, error) {
 	return api.gw.ResolveMutable(ctx, p)
 }
 
@@ -136,28 +135,28 @@ func (api *mockAPI) GetIPNSRecord(ctx context.Context, c cid.Cid) ([]byte, error
 	return nil, routing.ErrNotSupported
 }
 
-func (api *mockAPI) GetDNSLinkRecord(ctx context.Context, hostname string) (ipath.Path, error) {
+func (api *mockAPI) GetDNSLinkRecord(ctx context.Context, hostname string) (ipfspath.Path, error) {
 	if api.namesys != nil {
 		p, err := api.namesys.Resolve(ctx, "/ipns/"+hostname, nsopts.Depth(1))
 		if err == namesys.ErrResolveRecursion {
 			err = nil
 		}
-		return ipath.New(p.String()), err
+		return p, err
 	}
 
 	return nil, errors.New("not implemented")
 }
 
-func (api *mockAPI) IsCached(ctx context.Context, p ipath.Path) bool {
+func (api *mockAPI) IsCached(ctx context.Context, p ipfspath.Path) bool {
 	return api.gw.IsCached(ctx, p)
 }
 
-func (api *mockAPI) ResolvePath(ctx context.Context, immutablePath ImmutablePath) (ContentPathMetadata, error) {
+func (api *mockAPI) ResolvePath(ctx context.Context, immutablePath ipfspath.ImmutablePath) (ContentPathMetadata, error) {
 	return api.gw.ResolvePath(ctx, immutablePath)
 }
 
-func (api *mockAPI) resolvePathNoRootsReturned(ctx context.Context, ip ipath.Path) (ipath.Resolved, error) {
-	var imPath ImmutablePath
+func (api *mockAPI) resolvePathNoRootsReturned(ctx context.Context, ip ipfspath.Path) (ipfspath.ResolvedPath, error) {
+	var imPath ipfspath.ImmutablePath
 	var err error
 	if ip.Mutable() {
 		imPath, err = api.ResolveMutable(ctx, ip)
@@ -165,7 +164,7 @@ func (api *mockAPI) resolvePathNoRootsReturned(ctx context.Context, ip ipath.Pat
 			return nil, err
 		}
 	} else {
-		imPath, err = NewImmutablePath(ip)
+		imPath, err = ipfspath.NewImmutablePath(ip)
 		if err != nil {
 			return nil, err
 		}
@@ -232,14 +231,17 @@ func TestGatewayGet(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	k, err := api.resolvePathNoRootsReturned(ctx, ipath.Join(ipath.IpfsPath(root), t.Name(), "fnord"))
+	p, err := ipfspath.Join(ipfspath.NewIPFSPath(root), t.Name(), "fnord")
 	assert.NoError(t, err)
 
-	api.namesys["/ipns/example.com"] = path.FromCid(k.Cid())
-	api.namesys["/ipns/working.example.com"] = path.FromString(k.String())
-	api.namesys["/ipns/double.example.com"] = path.FromString("/ipns/working.example.com")
-	api.namesys["/ipns/triple.example.com"] = path.FromString("/ipns/double.example.com")
-	api.namesys["/ipns/broken.example.com"] = path.FromString("/ipns/" + k.Cid().String())
+	k, err := api.resolvePathNoRootsReturned(ctx, p)
+	assert.NoError(t, err)
+
+	api.namesys["/ipns/example.com"] = ipfspath.NewIPFSPath(k.Cid())
+	api.namesys["/ipns/working.example.com"] = k
+	api.namesys["/ipns/double.example.com"] = ipfspath.NewDNSLinkPath("working.example.com")
+	api.namesys["/ipns/triple.example.com"] = ipfspath.NewDNSLinkPath("double.example.com")
+	api.namesys["/ipns/broken.example.com"] = ipfspath.NewDNSLinkPath(k.Cid().String())
 	// We picked .man because:
 	// 1. It's a valid TLD.
 	// 2. Go treats it as the file extension for "man" files (even though
@@ -247,7 +249,7 @@ func TestGatewayGet(t *testing.T) {
 	//
 	// Unfortunately, this may not work on all platforms as file type
 	// detection is platform dependent.
-	api.namesys["/ipns/example.man"] = path.FromString(k.String())
+	api.namesys["/ipns/example.man"] = k
 
 	t.Log(ts.URL)
 	for _, test := range []struct {
@@ -341,11 +343,14 @@ func TestIPNSHostnameRedirect(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	k, err := api.resolvePathNoRootsReturned(ctx, ipath.Join(ipath.IpfsPath(root), t.Name()))
+	p, err := ipfspath.Join(ipfspath.NewIPFSPath(root), t.Name())
+	assert.NoError(t, err)
+
+	k, err := api.resolvePathNoRootsReturned(ctx, p)
 	assert.NoError(t, err)
 
 	t.Logf("k: %s\n", k)
-	api.namesys["/ipns/example.net"] = path.FromString(k.String())
+	api.namesys["/ipns/example.net"] = k
 
 	// make request to directory containing index.html
 	req, err := http.NewRequest(http.MethodGet, ts.URL+"/foo", nil)
@@ -396,18 +401,25 @@ func TestIPNSHostnameBacklinks(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	k, err := api.resolvePathNoRootsReturned(ctx, ipath.Join(ipath.IpfsPath(root), t.Name()))
+	p, err := ipfspath.Join(ipfspath.NewIPFSPath(root), t.Name())
+	assert.NoError(t, err)
+
+	k, err := api.resolvePathNoRootsReturned(ctx, p)
 	assert.NoError(t, err)
 
 	// create /ipns/example.net/foo/
-	k2, err := api.resolvePathNoRootsReturned(ctx, ipath.Join(k, "foo? #<'"))
+	p2, err := ipfspath.Join(k, "foo? #<'")
+	assert.NoError(t, err)
+	k2, err := api.resolvePathNoRootsReturned(ctx, p2)
 	assert.NoError(t, err)
 
-	k3, err := api.resolvePathNoRootsReturned(ctx, ipath.Join(k, "foo? #<'/bar"))
+	p3, err := ipfspath.Join(k, "foo? #<'/bar")
+	assert.NoError(t, err)
+	k3, err := api.resolvePathNoRootsReturned(ctx, p3)
 	assert.NoError(t, err)
 
 	t.Logf("k: %s\n", k)
-	api.namesys["/ipns/example.net"] = path.FromString(k.String())
+	api.namesys["/ipns/example.net"] = k
 
 	// make request to directory listing
 	req, err := http.NewRequest(http.MethodGet, ts.URL+"/foo%3F%20%23%3C%27/", nil)
@@ -480,11 +492,14 @@ func TestPretty404(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	k, err := api.resolvePathNoRootsReturned(ctx, ipath.Join(ipath.IpfsPath(root), t.Name()))
+	p, err := ipfspath.Join(ipfspath.NewIPFSPath(root), t.Name())
+	assert.NoError(t, err)
+
+	k, err := api.resolvePathNoRootsReturned(ctx, p)
 	assert.NoError(t, err)
 
 	host := "example.net"
-	api.namesys["/ipns/"+host] = path.FromString(k.String())
+	api.namesys["/ipns/"+host] = k
 
 	for _, test := range []struct {
 		path   string
@@ -701,8 +716,8 @@ func TestIpfsTrustlessMode(t *testing.T) {
 
 func TestIpnsTrustlessMode(t *testing.T) {
 	api, root := newMockAPI(t)
-	api.namesys["/ipns/trustless.com"] = path.FromCid(root)
-	api.namesys["/ipns/trusted.com"] = path.FromCid(root)
+	api.namesys["/ipns/trustless.com"] = ipfspath.NewIPFSPath(root)
+	api.namesys["/ipns/trusted.com"] = ipfspath.NewIPFSPath(root)
 
 	ts := newTestServerWithConfig(t, api, Config{
 		Headers:   map[string][]string{},
@@ -764,7 +779,10 @@ func TestDagJsonCborPreview(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	resolvedPath, err := api.resolvePathNoRootsReturned(ctx, ipath.Join(ipath.IpfsPath(root), t.Name(), "example"))
+	p, err := ipfspath.Join(ipfspath.NewIPFSPath(root), t.Name(), "example")
+	assert.NoError(t, err)
+
+	resolvedPath, err := api.resolvePathNoRootsReturned(ctx, p)
 	assert.NoError(t, err)
 
 	cidStr := resolvedPath.Cid().String()

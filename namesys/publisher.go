@@ -163,7 +163,7 @@ func (p *IpnsPublisher) updateRecord(ctx context.Context, k crypto.PrivKey, valu
 	}
 
 	seqno := rec.GetSequence() // returns 0 if rec is nil
-	if rec != nil && value != path.Path(rec.GetValue()) {
+	if rec != nil && value.String() != string(rec.GetValue()) {
 		// Don't bother incrementing the sequence number unless the
 		// value changes.
 		seqno++
@@ -172,7 +172,7 @@ func (p *IpnsPublisher) updateRecord(ctx context.Context, k crypto.PrivKey, valu
 	opts := opts.ProcessPublishOptions(options)
 
 	// Create record
-	entry, err := ipns.Create(k, []byte(value), seqno, opts.EOL, opts.TTL)
+	entry, err := ipns.Create(k, []byte(value.String()), seqno, opts.EOL, opts.TTL)
 	if err != nil {
 		return nil, err
 	}

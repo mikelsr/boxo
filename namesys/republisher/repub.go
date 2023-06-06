@@ -150,7 +150,12 @@ func (rp *Republisher) republishEntry(ctx context.Context, priv ic.PrivKey) erro
 		return err
 	}
 
-	p := path.Path(e.GetValue())
+	p, err := path.NewPath(string(e.GetValue()))
+	if err != nil {
+		span.RecordError(err)
+		return err
+	}
+
 	prevEol, err := ipns.GetEOL(e)
 	if err != nil {
 		span.RecordError(err)
