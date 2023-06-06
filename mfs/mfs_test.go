@@ -11,11 +11,10 @@ import (
 	mrand "math/rand"
 	"os"
 	"sort"
+	"strings"
 	"sync"
 	"testing"
 	"time"
-
-	path "github.com/ipfs/boxo/path"
 
 	bserv "github.com/ipfs/boxo/blockservice"
 	dag "github.com/ipfs/boxo/ipld/merkledag"
@@ -58,7 +57,7 @@ func fileNodeFromReader(t *testing.T, ds ipld.DAGService, r io.Reader) ipld.Node
 }
 
 func mkdirP(t *testing.T, root *Directory, pth string) *Directory {
-	dirs := path.SplitList(pth)
+	dirs := strings.Split(pth, "/")
 	cur := root
 	for _, d := range dirs {
 		n, err := cur.Mkdir(d)
@@ -144,7 +143,7 @@ func assertFileAtPath(ds ipld.DAGService, root *Directory, expn ipld.Node, pth s
 		return dag.ErrNotProtobuf
 	}
 
-	parts := path.SplitList(pth)
+	parts := strings.Split(pth, "/")
 	cur := root
 	for i, d := range parts[:len(parts)-1] {
 		next, err := cur.Child(d)
