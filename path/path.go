@@ -256,6 +256,21 @@ func NewPathFromSegments(segments ...string) (Path, error) {
 	return NewPath("/" + strings.Join(segments, "/"))
 }
 
+// NewResolvedPath creates a new [ResolvedPath] from an existing path, with a
+// resolved CID and remainder path. This function is intended to be used only
+// by resolver implementations.
+func NewResolvedPath(p Path, cid cid.Cid, remainder string) ResolvedPath {
+	return &resolvedPath{
+		path: path{
+			str:       p.String(),
+			root:      p.Root(),
+			namespace: p.Namespace(),
+		},
+		cid:       cid,
+		remainder: remainder,
+	}
+}
+
 // SplitImmutablePath cleans up and splits the given path. It extracts the first
 // component, which must be a CID, and returns it separately.
 func SplitImmutablePath(fpath Path) (cid.Cid, []string, error) {
@@ -280,20 +295,9 @@ func SplitImmutablePath(fpath Path) (cid.Cid, []string, error) {
 	return c, parts[1:], nil
 }
 
+// Join joins a [Path] with certain segments and returns a new [Path].
 func Join(p Path, segments ...string) (Path, error) {
 	s := p.Segments()
 	s = append(s, segments...)
 	return NewPathFromSegments(s...)
-}
-
-func NewResolvedPath(p Path, cid cid.Cid, remainder string) ResolvedPath {
-	return &resolvedPath{
-		path: path{
-			str:       fmt.Sprintf("%s/%s", p.String(), remainder),
-			root:      p.Root(),
-			namespace: p.Namespace(),
-		},
-		cid:       cid,
-		remainder: remainder,
-	}
 }
