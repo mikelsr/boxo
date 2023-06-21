@@ -3,6 +3,7 @@ package gateway
 import (
 	"context"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	gopath "path"
@@ -67,17 +68,19 @@ func (i *handler) serveDirectory(ctx context.Context, w http.ResponseWriter, r *
 	}
 
 	// TODO: could/should this all be skipped to have HEAD requests just return html content type and save the complexity? If so can we skip the above code as well?
-	var idxFile files.File
+	var idxFileBytes io.ReadCloser
+	var idxFileSize int64
+	var returnRangeStartsAtZero bool
 	if isHeadRequest {
-		var idx files.Node
+		var idx *HeadResponse
 		_, idx, err = i.backend.Head(ctx, imIndexPath)
 		if err == nil {
-			f, ok := idx.(files.File)
-			if !ok {
+			if !idx.isFile {
 				i.webError(w, r, fmt.Errorf("%q could not be read: %w", imIndexPath, files.ErrNotReader), http.StatusUnprocessableEntity)
 				return false
 			}
-			idxFile = f
+			returnRangeStartsAtZero = true
+			idxFileBytes = idx.startingBytes
 		}
 	} else {
 		var getResp *GetResponse
@@ -87,14 +90,18 @@ func (i *handler) serveDirectory(ctx context.Context, w http.ResponseWriter, r *
 				i.webError(w, r, fmt.Errorf("%q could not be read: %w", imIndexPath, files.ErrNotReader), http.StatusUnprocessableEntity)
 				return false
 			}
-			idxFile = getResp.bytes
+			if len(ranges) > 0 {
+				ra := ranges[0]
+				returnRangeStartsAtZero = ra.From == 0
+			}
+			idxFileBytes = getResp.bytes
 		}
 	}
 
 	if err == nil {
 		logger.Debugw("serving index.html file", "path", idxPath)
 		// write to request
-		success := i.serveFile(ctx, w, r, resolvedPath, idxPath, idxFile, "text/html", begin)
+		success := i.serveFile(ctx, w, r, resolvedPath, idxPath, idxFileSize, idxFileBytes, false, returnRangeStartsAtZero, "text/html", begin)
 		if success {
 			i.unixfsDirIndexGetMetric.WithLabelValues(contentPath.Namespace()).Observe(time.Since(begin).Seconds())
 		}
