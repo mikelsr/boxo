@@ -16,6 +16,8 @@ The following emojis are used to highlight certain changes:
 
 ### Added
 
+* ✨ - while the call signature remains the same, the blocks that Bitswap returns can now be cast to [traceability.Block](./bitswap/client/traceability/block.go), which will additionally tell you where the Block came from and how long it took to fetch. This helps consumers of Bitswap collect better metrics on Bitswap behavior.
+
 ### Changed
 
 * 🛠 The `ipns` package has been refactored. You should no longer use the direct Protobuf
