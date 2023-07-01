@@ -14,9 +14,6 @@ import (
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/ipfs/go-metrics-interface"
-	"github.com/ipfs/go-peertaskqueue"
-	"github.com/ipfs/go-peertaskqueue/peertask"
-	"github.com/ipfs/go-peertaskqueue/peertracker"
 	process "github.com/jbenet/goprocess"
 	wl "github.com/mikelsr/boxo/bitswap/client/wantlist"
 	"github.com/mikelsr/boxo/bitswap/internal/defaults"
@@ -25,6 +22,9 @@ import (
 	bmetrics "github.com/mikelsr/boxo/bitswap/metrics"
 	bstore "github.com/mikelsr/boxo/blockstore"
 	"github.com/mikelsr/go-libp2p/core/peer"
+	"github.com/mikelsr/go-peertaskqueue"
+	"github.com/mikelsr/go-peertaskqueue/peertask"
+	"github.com/mikelsr/go-peertaskqueue/peertracker"
 	mh "github.com/multiformats/go-multihash"
 )
 

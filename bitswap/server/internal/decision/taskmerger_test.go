@@ -3,10 +3,10 @@ package decision
 import (
 	"testing"
 
-	"github.com/ipfs/go-peertaskqueue"
-	"github.com/ipfs/go-peertaskqueue/peertask"
 	"github.com/mikelsr/boxo/bitswap/internal/testutil"
 	"github.com/mikelsr/boxo/internal/test"
+	"github.com/mikelsr/go-peertaskqueue"
+	"github.com/mikelsr/go-peertaskqueue/peertask"
 )
 
 func TestPushHaveVsBlock(t *testing.T) {

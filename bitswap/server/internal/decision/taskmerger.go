@@ -1,7 +1,7 @@
 package decision
 
 import (
-	"github.com/ipfs/go-peertaskqueue/peertask"
+	"github.com/mikelsr/go-peertaskqueue/peertask"
 )
 
 // taskData is extra data associated with each task in the request queue
