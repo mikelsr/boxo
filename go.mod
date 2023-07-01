@@ -40,7 +40,6 @@ require (
 	github.com/libp2p/go-msgio v0.3.0
 	github.com/miekg/dns v1.1.55
 	github.com/mikelsr/go-libp2p v0.28.1-0.20230701150814-14dbb6aaeb77
-	github.com/mikelsr/go-libp2p-kad-dht v0.0.0-20230701155659-54f30764dc5e
 	github.com/mikelsr/go-libp2p-record v0.0.0-20230701152456-8c9f0e592b0e
 	github.com/mikelsr/go-libp2p-routing-helpers v0.0.0-20230701152654-b21f8d2876ae
 	github.com/mikelsr/go-libp2p-testing v0.12.1-0.20230701144900-4a2e31d819f6
@@ -113,11 +112,6 @@ require (
 	github.com/koron/go-ssdp v0.0.4 // indirect
 	github.com/libp2p/go-cidranger v1.1.0 // indirect
 	github.com/libp2p/go-flow-metrics v0.1.0 // indirect
-	github.com/libp2p/go-libp2p v0.28.1 // indirect
-	github.com/libp2p/go-libp2p-asn-util v0.3.0 // indirect
-	github.com/libp2p/go-libp2p-kad-dht v0.24.2 // indirect
-	github.com/libp2p/go-libp2p-kbucket v0.6.3 // indirect
-	github.com/libp2p/go-libp2p-record v0.2.0 // indirect
 	github.com/libp2p/go-nat v0.2.0 // indirect
 	github.com/libp2p/go-netroute v0.2.1 // indirect
 	github.com/libp2p/go-reuseport v0.3.0 // indirect
@@ -125,6 +119,8 @@ require (
 	github.com/marten-seemann/tcp v0.0.0-20210406111302-dfbc87cc63fd // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.4 // indirect
+	github.com/mikelsr/go-libp2p-kad-dht v0.0.0-20230701160159-79e227b9057c // indirect
+	github.com/mikelsr/go-libp2p-kbucket v0.0.0-20230701152249-5c470d470ff4 // indirect
 	github.com/mikelsr/quic-go v0.36.1-0.20230701132136-1d9415b66898 // indirect
 	github.com/mikioh/tcpinfo v0.0.0-20190314235526-30a79bb1804b // indirect
 	github.com/mikioh/tcpopt v0.0.0-20190314235656-172688c1accc // indirect
