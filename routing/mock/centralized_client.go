@@ -6,9 +6,9 @@ import (
 
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
-	tnet "github.com/libp2p/go-libp2p-testing/net"
-	"github.com/libp2p/go-libp2p/core/peer"
-	"github.com/libp2p/go-libp2p/core/routing"
+	tnet "github.com/mikelsr/go-libp2p-testing/net"
+	"github.com/mikelsr/go-libp2p/core/peer"
+	"github.com/mikelsr/go-libp2p/core/routing"
 	ma "github.com/multiformats/go-multiaddr"
 )
 

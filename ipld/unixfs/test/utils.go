@@ -7,16 +7,16 @@ import (
 	"io"
 	"testing"
 
-	ft "github.com/ipfs/boxo/ipld/unixfs"
-	h "github.com/ipfs/boxo/ipld/unixfs/importer/helpers"
-	trickle "github.com/ipfs/boxo/ipld/unixfs/importer/trickle"
+	ft "github.com/mikelsr/boxo/ipld/unixfs"
+	h "github.com/mikelsr/boxo/ipld/unixfs/importer/helpers"
+	trickle "github.com/mikelsr/boxo/ipld/unixfs/importer/trickle"
 
-	chunker "github.com/ipfs/boxo/chunker"
-	mdag "github.com/ipfs/boxo/ipld/merkledag"
-	mdagmock "github.com/ipfs/boxo/ipld/merkledag/test"
-	u "github.com/ipfs/boxo/util"
 	cid "github.com/ipfs/go-cid"
 	ipld "github.com/ipfs/go-ipld-format"
+	chunker "github.com/mikelsr/boxo/chunker"
+	mdag "github.com/mikelsr/boxo/ipld/merkledag"
+	mdagmock "github.com/mikelsr/boxo/ipld/merkledag/test"
+	u "github.com/mikelsr/boxo/util"
 	mh "github.com/multiformats/go-multihash"
 )
 

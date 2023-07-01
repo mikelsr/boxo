@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"testing"
 
-	ipath "github.com/ipfs/boxo/coreiface/path"
+	ipath "github.com/mikelsr/boxo/coreiface/path"
 	"github.com/stretchr/testify/require"
 )
 

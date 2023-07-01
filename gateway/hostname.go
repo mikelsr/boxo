@@ -10,8 +10,8 @@ import (
 	"strings"
 
 	cid "github.com/ipfs/go-cid"
-	"github.com/libp2p/go-libp2p/core/peer"
 	dns "github.com/miekg/dns"
+	"github.com/mikelsr/go-libp2p/core/peer"
 
 	mbase "github.com/multiformats/go-multibase"
 )

@@ -7,19 +7,19 @@ import (
 	"errors"
 	"time"
 
-	keystore "github.com/ipfs/boxo/keystore"
-	"github.com/ipfs/boxo/namesys"
-	"github.com/ipfs/boxo/path"
+	keystore "github.com/mikelsr/boxo/keystore"
+	"github.com/mikelsr/boxo/namesys"
+	"github.com/mikelsr/boxo/path"
 	"go.opentelemetry.io/otel/attribute"
 
-	opts "github.com/ipfs/boxo/coreiface/options/namesys"
-	"github.com/ipfs/boxo/ipns"
 	ds "github.com/ipfs/go-datastore"
 	logging "github.com/ipfs/go-log/v2"
 	"github.com/jbenet/goprocess"
 	gpctx "github.com/jbenet/goprocess/context"
-	ic "github.com/libp2p/go-libp2p/core/crypto"
-	"github.com/libp2p/go-libp2p/core/peer"
+	opts "github.com/mikelsr/boxo/coreiface/options/namesys"
+	"github.com/mikelsr/boxo/ipns"
+	ic "github.com/mikelsr/go-libp2p/core/crypto"
+	"github.com/mikelsr/go-libp2p/core/peer"
 )
 
 var errNoEntry = errors.New("no previous entry")

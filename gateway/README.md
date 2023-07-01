@@ -4,7 +4,7 @@
 
 ## Documentation
 
-- Go Documentation: https://pkg.go.dev/github.com/ipfs/boxo/gateway
+- Go Documentation: https://pkg.go.dev/github.com/mikelsr/boxo/gateway
 - Gateway Specification: https://specs.ipfs.tech/
 - Types of HTTP Gateways: https://docs.ipfs.tech/how-to/address-ipfs-on-web/#http-gateways
 

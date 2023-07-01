@@ -6,16 +6,16 @@ import (
 	"io"
 	"os"
 
-	dag "github.com/ipfs/boxo/ipld/merkledag"
+	dag "github.com/mikelsr/boxo/ipld/merkledag"
 
-	ft "github.com/ipfs/boxo/ipld/unixfs"
-	pb "github.com/ipfs/boxo/ipld/unixfs/pb"
+	ft "github.com/mikelsr/boxo/ipld/unixfs"
+	pb "github.com/mikelsr/boxo/ipld/unixfs/pb"
 
-	chunker "github.com/ipfs/boxo/chunker"
-	"github.com/ipfs/boxo/files"
-	pi "github.com/ipfs/boxo/filestore/posinfo"
 	cid "github.com/ipfs/go-cid"
 	ipld "github.com/ipfs/go-ipld-format"
+	chunker "github.com/mikelsr/boxo/chunker"
+	"github.com/mikelsr/boxo/files"
+	pi "github.com/mikelsr/boxo/filestore/posinfo"
 )
 
 var ErrMissingFsRef = errors.New("missing file path or URL, can't create filestore reference")

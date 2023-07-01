@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"time"
 
-	ipns_pb "github.com/ipfs/boxo/ipns/pb"
 	"github.com/ipld/go-ipld-prime/codec/dagcbor"
 	basicnode "github.com/ipld/go-ipld-prime/node/basic"
-	record "github.com/libp2p/go-libp2p-record"
-	ic "github.com/libp2p/go-libp2p/core/crypto"
-	"github.com/libp2p/go-libp2p/core/peer"
-	"github.com/libp2p/go-libp2p/core/peerstore"
+	ipns_pb "github.com/mikelsr/boxo/ipns/pb"
+	record "github.com/mikelsr/go-libp2p-record"
+	ic "github.com/mikelsr/go-libp2p/core/crypto"
+	"github.com/mikelsr/go-libp2p/core/peer"
+	"github.com/mikelsr/go-libp2p/core/peerstore"
 	"google.golang.org/protobuf/proto"
 )
 

@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"testing"
 
-	mdag "github.com/ipfs/boxo/ipld/merkledag"
-	mdagtest "github.com/ipfs/boxo/ipld/merkledag/test"
+	mdag "github.com/mikelsr/boxo/ipld/merkledag"
+	mdagtest "github.com/mikelsr/boxo/ipld/merkledag/test"
 
 	ipld "github.com/ipfs/go-ipld-format"
 )

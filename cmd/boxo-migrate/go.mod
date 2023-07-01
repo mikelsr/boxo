@@ -1,4 +1,4 @@
-module github.com/ipfs/boxo/cmd/boxo-migrate
+module github.com/mikelsr/boxo/cmd/boxo-migrate
 
 go 1.19
 

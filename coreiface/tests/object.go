@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	iface "github.com/ipfs/boxo/coreiface"
-	opt "github.com/ipfs/boxo/coreiface/options"
+	iface "github.com/mikelsr/boxo/coreiface"
+	opt "github.com/mikelsr/boxo/coreiface/options"
 )
 
 func (tp *TestSuite) TestObject(t *testing.T) {

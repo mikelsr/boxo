@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/ipfs/boxo/ipns"
-	"github.com/libp2p/go-libp2p/core/routing"
+	"github.com/mikelsr/boxo/ipns"
+	"github.com/mikelsr/go-libp2p/core/routing"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
 

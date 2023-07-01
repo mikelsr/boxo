@@ -7,10 +7,10 @@ import (
 
 	"github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
-	record "github.com/libp2p/go-libp2p-record"
-	"github.com/libp2p/go-libp2p/core/host"
-	"github.com/libp2p/go-libp2p/core/peer"
-	"github.com/libp2p/go-libp2p/core/routing"
+	record "github.com/mikelsr/go-libp2p-record"
+	"github.com/mikelsr/go-libp2p/core/host"
+	"github.com/mikelsr/go-libp2p/core/peer"
+	"github.com/mikelsr/go-libp2p/core/routing"
 )
 
 type nilclient struct {

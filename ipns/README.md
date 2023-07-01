@@ -18,7 +18,7 @@ import (
 
 	"github.com/ipfs/boxo/ipns"
 	"github.com/ipfs/boxo/path"
-	ic "github.com/libp2p/go-libp2p/core/crypto"
+	ic "github.com/mikelsr/go-libp2p/core/crypto"
 )
 
 func main() {

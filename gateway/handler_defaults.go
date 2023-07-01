@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ipfs/boxo/files"
+	"github.com/mikelsr/boxo/files"
 	mc "github.com/multiformats/go-multicodec"
 
 	"go.opentelemetry.io/otel/attribute"

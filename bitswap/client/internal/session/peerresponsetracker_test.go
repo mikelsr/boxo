@@ -4,8 +4,8 @@ import (
 	"math"
 	"testing"
 
-	"github.com/ipfs/boxo/bitswap/internal/testutil"
-	peer "github.com/libp2p/go-libp2p/core/peer"
+	"github.com/mikelsr/boxo/bitswap/internal/testutil"
+	peer "github.com/mikelsr/go-libp2p/core/peer"
 )
 
 func TestPeerResponseTrackerInit(t *testing.T) {

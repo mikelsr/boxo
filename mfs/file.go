@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"sync"
 
-	dag "github.com/ipfs/boxo/ipld/merkledag"
-	ft "github.com/ipfs/boxo/ipld/unixfs"
-	mod "github.com/ipfs/boxo/ipld/unixfs/mod"
+	dag "github.com/mikelsr/boxo/ipld/merkledag"
+	ft "github.com/mikelsr/boxo/ipld/unixfs"
+	mod "github.com/mikelsr/boxo/ipld/unixfs/mod"
 
-	chunker "github.com/ipfs/boxo/chunker"
 	ipld "github.com/ipfs/go-ipld-format"
+	chunker "github.com/mikelsr/boxo/chunker"
 )
 
 // File represents a file in the MFS, its logic its mainly targeted

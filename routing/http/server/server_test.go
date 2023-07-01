@@ -8,10 +8,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ipfs/boxo/routing/http/types"
-	"github.com/ipfs/boxo/routing/http/types/iter"
 	"github.com/ipfs/go-cid"
-	"github.com/libp2p/go-libp2p/core/peer"
+	"github.com/mikelsr/boxo/routing/http/types"
+	"github.com/mikelsr/boxo/routing/http/types/iter"
+	"github.com/mikelsr/go-libp2p/core/peer"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 )

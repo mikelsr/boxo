@@ -6,7 +6,7 @@ import (
 	"github.com/ipfs/go-cid"
 	"testing"
 
-	"github.com/libp2p/go-libp2p/core/peer"
+	"github.com/mikelsr/go-libp2p/core/peer"
 )
 
 func TestBitswapFetch(t *testing.T) {

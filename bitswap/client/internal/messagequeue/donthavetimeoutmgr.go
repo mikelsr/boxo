@@ -7,7 +7,7 @@ import (
 
 	"github.com/benbjohnson/clock"
 	cid "github.com/ipfs/go-cid"
-	"github.com/libp2p/go-libp2p/p2p/protocol/ping"
+	"github.com/mikelsr/go-libp2p/p2p/protocol/ping"
 )
 
 const (

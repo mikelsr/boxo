@@ -6,17 +6,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ipfs/boxo/bitswap"
-	"github.com/ipfs/boxo/bitswap/client/internal/session"
-	testinstance "github.com/ipfs/boxo/bitswap/testinstance"
-	tn "github.com/ipfs/boxo/bitswap/testnet"
-	"github.com/ipfs/boxo/internal/test"
-	mockrouting "github.com/ipfs/boxo/routing/mock"
 	blocks "github.com/ipfs/go-block-format"
 	cid "github.com/ipfs/go-cid"
 	blocksutil "github.com/ipfs/go-ipfs-blocksutil"
 	delay "github.com/ipfs/go-ipfs-delay"
-	tu "github.com/libp2p/go-libp2p-testing/etc"
+	"github.com/mikelsr/boxo/bitswap"
+	"github.com/mikelsr/boxo/bitswap/client/internal/session"
+	testinstance "github.com/mikelsr/boxo/bitswap/testinstance"
+	tn "github.com/mikelsr/boxo/bitswap/testnet"
+	"github.com/mikelsr/boxo/internal/test"
+	mockrouting "github.com/mikelsr/boxo/routing/mock"
+	tu "github.com/mikelsr/go-libp2p-testing/etc"
 )
 
 func getVirtualNetwork() tn.Network {

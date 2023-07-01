@@ -11,13 +11,13 @@ import (
 	"context"
 	"errors"
 
-	blockstore "github.com/ipfs/boxo/blockstore"
-	posinfo "github.com/ipfs/boxo/filestore/posinfo"
 	blocks "github.com/ipfs/go-block-format"
 	cid "github.com/ipfs/go-cid"
 	dsq "github.com/ipfs/go-datastore/query"
 	ipld "github.com/ipfs/go-ipld-format"
 	logging "github.com/ipfs/go-log/v2"
+	blockstore "github.com/mikelsr/boxo/blockstore"
+	posinfo "github.com/mikelsr/boxo/filestore/posinfo"
 )
 
 var logger = logging.Logger("filestore")

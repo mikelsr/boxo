@@ -15,18 +15,18 @@ import (
 	"testing"
 	"time"
 
-	. "github.com/ipfs/boxo/ipld/merkledag"
-	mdpb "github.com/ipfs/boxo/ipld/merkledag/pb"
-	dstest "github.com/ipfs/boxo/ipld/merkledag/test"
+	. "github.com/mikelsr/boxo/ipld/merkledag"
+	mdpb "github.com/mikelsr/boxo/ipld/merkledag/pb"
+	dstest "github.com/mikelsr/boxo/ipld/merkledag/test"
 
-	bserv "github.com/ipfs/boxo/blockservice"
-	bstest "github.com/ipfs/boxo/blockservice/test"
-	offline "github.com/ipfs/boxo/exchange/offline"
-	u "github.com/ipfs/boxo/util"
 	blocks "github.com/ipfs/go-block-format"
 	cid "github.com/ipfs/go-cid"
 	ipld "github.com/ipfs/go-ipld-format"
 	prime "github.com/ipld/go-ipld-prime"
+	bserv "github.com/mikelsr/boxo/blockservice"
+	bstest "github.com/mikelsr/boxo/blockservice/test"
+	offline "github.com/mikelsr/boxo/exchange/offline"
+	u "github.com/mikelsr/boxo/util"
 	mh "github.com/multiformats/go-multihash"
 )
 

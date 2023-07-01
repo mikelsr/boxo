@@ -9,11 +9,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ipfs/boxo/gateway/assets"
-	"github.com/ipfs/boxo/path/resolver"
 	"github.com/ipfs/go-cid"
 	ipld "github.com/ipfs/go-ipld-format"
 	"github.com/ipld/go-ipld-prime/datamodel"
+	"github.com/mikelsr/boxo/gateway/assets"
+	"github.com/mikelsr/boxo/path/resolver"
 )
 
 var (

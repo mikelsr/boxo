@@ -10,14 +10,14 @@ import (
 	"time"
 
 	"github.com/benbjohnson/clock"
-	"github.com/ipfs/boxo/bitswap/internal/testutil"
-	bsmsg "github.com/ipfs/boxo/bitswap/message"
-	pb "github.com/ipfs/boxo/bitswap/message/pb"
-	bsnet "github.com/ipfs/boxo/bitswap/network"
-	"github.com/ipfs/boxo/internal/test"
 	cid "github.com/ipfs/go-cid"
-	peer "github.com/libp2p/go-libp2p/core/peer"
-	"github.com/libp2p/go-libp2p/p2p/protocol/ping"
+	"github.com/mikelsr/boxo/bitswap/internal/testutil"
+	bsmsg "github.com/mikelsr/boxo/bitswap/message"
+	pb "github.com/mikelsr/boxo/bitswap/message/pb"
+	bsnet "github.com/mikelsr/boxo/bitswap/network"
+	"github.com/mikelsr/boxo/internal/test"
+	peer "github.com/mikelsr/go-libp2p/core/peer"
+	"github.com/mikelsr/go-libp2p/p2p/protocol/ping"
 )
 
 type fakeMessageNetwork struct {

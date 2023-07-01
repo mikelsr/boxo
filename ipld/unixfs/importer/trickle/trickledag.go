@@ -20,12 +20,12 @@ import (
 	"errors"
 	"fmt"
 
-	ft "github.com/ipfs/boxo/ipld/unixfs"
-	h "github.com/ipfs/boxo/ipld/unixfs/importer/helpers"
+	ft "github.com/mikelsr/boxo/ipld/unixfs"
+	h "github.com/mikelsr/boxo/ipld/unixfs/importer/helpers"
 
-	dag "github.com/ipfs/boxo/ipld/merkledag"
 	cid "github.com/ipfs/go-cid"
 	ipld "github.com/ipfs/go-ipld-format"
+	dag "github.com/mikelsr/boxo/ipld/merkledag"
 )
 
 // depthRepeat specifies how many times to append a child tree of a

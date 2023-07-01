@@ -13,12 +13,12 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/ipfs/boxo/routing/http/internal/drjson"
-	"github.com/ipfs/boxo/routing/http/types"
-	"github.com/ipfs/boxo/routing/http/types/iter"
-	jsontypes "github.com/ipfs/boxo/routing/http/types/json"
 	"github.com/ipfs/go-cid"
-	"github.com/libp2p/go-libp2p/core/peer"
+	"github.com/mikelsr/boxo/routing/http/internal/drjson"
+	"github.com/mikelsr/boxo/routing/http/types"
+	"github.com/mikelsr/boxo/routing/http/types/iter"
+	jsontypes "github.com/mikelsr/boxo/routing/http/types/json"
+	"github.com/mikelsr/go-libp2p/core/peer"
 	"github.com/multiformats/go-multiaddr"
 
 	logging "github.com/ipfs/go-log/v2"

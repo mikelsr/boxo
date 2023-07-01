@@ -42,7 +42,7 @@ The IPFS client will then download the file from the server peer and let you kno
 The `makeHost()` function creates a go-libp2p host that can make and receive connections and is usable by various protocols such as Bitswap.
 
 Both the client and the server have their own libp2p hosts which have 
-- A [libp2p Peer ID](https://godoc.org/github.com/libp2p/go-libp2p-peer#ID) like `QmNtX1cvrm2K6mQmMEaMxAuB4rTexhd87vpYVot4sEZzxc`. The example autogenerates a key pair on every run and uses an ID extracted from the public key (the hash of the public key).
+- A [libp2p Peer ID](https://godoc.org/github.com/mikelsr/go-libp2p-peer#ID) like `QmNtX1cvrm2K6mQmMEaMxAuB4rTexhd87vpYVot4sEZzxc`. The example autogenerates a key pair on every run and uses an ID extracted from the public key (the hash of the public key).
 - A [Multiaddress](https://godoc.org/github.com/multiformats/go-multiaddr), which indicates how to reach this peer. There can be several of them (using different protocols or locations for example). Example: `/ip4/127.0.0.1/tcp/1234`.
 
 The `startDataServer` function creates some local storage and then processes the file data into [UnixFS](https://docs.ipfs.tech/concepts/file-systems/#unix-file-system-unixfs) graph.

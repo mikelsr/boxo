@@ -7,12 +7,12 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/ipfs/boxo/blockservice"
-	"github.com/ipfs/boxo/blockstore"
-	"github.com/ipfs/boxo/examples/gateway/common"
-	"github.com/ipfs/boxo/gateway"
 	"github.com/ipfs/go-datastore"
 	dssync "github.com/ipfs/go-datastore/sync"
+	"github.com/mikelsr/boxo/blockservice"
+	"github.com/mikelsr/boxo/blockstore"
+	"github.com/mikelsr/boxo/examples/gateway/common"
+	"github.com/mikelsr/boxo/gateway"
 )
 
 func main() {

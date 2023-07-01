@@ -8,7 +8,7 @@ import (
 	"sort"
 	"testing"
 
-	ci "github.com/libp2p/go-libp2p/core/crypto"
+	ci "github.com/mikelsr/go-libp2p/core/crypto"
 )
 
 func privKeyOrFatal(t *testing.T) ci.PrivKey {

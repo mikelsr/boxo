@@ -5,13 +5,13 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/ipfs/boxo/routing/http/internal"
-	"github.com/ipfs/boxo/routing/http/types"
-	"github.com/ipfs/boxo/routing/http/types/iter"
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
-	"github.com/libp2p/go-libp2p/core/peer"
-	"github.com/libp2p/go-libp2p/core/routing"
+	"github.com/mikelsr/boxo/routing/http/internal"
+	"github.com/mikelsr/boxo/routing/http/types"
+	"github.com/mikelsr/boxo/routing/http/types/iter"
+	"github.com/mikelsr/go-libp2p/core/peer"
+	"github.com/mikelsr/go-libp2p/core/routing"
 	"github.com/multiformats/go-multiaddr"
 	"github.com/multiformats/go-multihash"
 )

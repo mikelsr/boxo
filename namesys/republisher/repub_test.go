@@ -7,22 +7,22 @@ import (
 	"time"
 
 	"github.com/jbenet/goprocess"
-	"github.com/libp2p/go-libp2p"
-	dht "github.com/libp2p/go-libp2p-kad-dht"
-	ic "github.com/libp2p/go-libp2p/core/crypto"
-	host "github.com/libp2p/go-libp2p/core/host"
-	peer "github.com/libp2p/go-libp2p/core/peer"
-	routing "github.com/libp2p/go-libp2p/core/routing"
+	"github.com/mikelsr/go-libp2p"
+	dht "github.com/mikelsr/go-libp2p-kad-dht"
+	ic "github.com/mikelsr/go-libp2p/core/crypto"
+	host "github.com/mikelsr/go-libp2p/core/host"
+	peer "github.com/mikelsr/go-libp2p/core/peer"
+	routing "github.com/mikelsr/go-libp2p/core/routing"
 
-	opts "github.com/ipfs/boxo/coreiface/options/namesys"
-	"github.com/ipfs/boxo/ipns"
-	"github.com/ipfs/boxo/path"
 	ds "github.com/ipfs/go-datastore"
 	dssync "github.com/ipfs/go-datastore/sync"
+	opts "github.com/mikelsr/boxo/coreiface/options/namesys"
+	"github.com/mikelsr/boxo/ipns"
+	"github.com/mikelsr/boxo/path"
 
-	keystore "github.com/ipfs/boxo/keystore"
-	"github.com/ipfs/boxo/namesys"
-	. "github.com/ipfs/boxo/namesys/republisher"
+	keystore "github.com/mikelsr/boxo/keystore"
+	"github.com/mikelsr/boxo/namesys"
+	. "github.com/mikelsr/boxo/namesys/republisher"
 )
 
 type mockNode struct {

@@ -3,9 +3,9 @@ package wantlist
 import (
 	"testing"
 
-	pb "github.com/ipfs/boxo/bitswap/message/pb"
-	"github.com/ipfs/boxo/internal/test"
 	cid "github.com/ipfs/go-cid"
+	pb "github.com/mikelsr/boxo/bitswap/message/pb"
+	"github.com/mikelsr/boxo/internal/test"
 	"github.com/stretchr/testify/require"
 )
 

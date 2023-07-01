@@ -10,12 +10,6 @@ import (
 
 	"github.com/google/uuid"
 
-	wl "github.com/ipfs/boxo/bitswap/client/wantlist"
-	"github.com/ipfs/boxo/bitswap/internal/defaults"
-	bsmsg "github.com/ipfs/boxo/bitswap/message"
-	pb "github.com/ipfs/boxo/bitswap/message/pb"
-	bmetrics "github.com/ipfs/boxo/bitswap/metrics"
-	bstore "github.com/ipfs/boxo/blockstore"
 	blocks "github.com/ipfs/go-block-format"
 	"github.com/ipfs/go-cid"
 	logging "github.com/ipfs/go-log/v2"
@@ -24,7 +18,13 @@ import (
 	"github.com/ipfs/go-peertaskqueue/peertask"
 	"github.com/ipfs/go-peertaskqueue/peertracker"
 	process "github.com/jbenet/goprocess"
-	"github.com/libp2p/go-libp2p/core/peer"
+	wl "github.com/mikelsr/boxo/bitswap/client/wantlist"
+	"github.com/mikelsr/boxo/bitswap/internal/defaults"
+	bsmsg "github.com/mikelsr/boxo/bitswap/message"
+	pb "github.com/mikelsr/boxo/bitswap/message/pb"
+	bmetrics "github.com/mikelsr/boxo/bitswap/metrics"
+	bstore "github.com/mikelsr/boxo/blockstore"
+	"github.com/mikelsr/go-libp2p/core/peer"
 	mh "github.com/multiformats/go-multihash"
 )
 

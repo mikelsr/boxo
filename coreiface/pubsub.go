@@ -4,9 +4,9 @@ import (
 	"context"
 	"io"
 
-	"github.com/ipfs/boxo/coreiface/options"
+	"github.com/mikelsr/boxo/coreiface/options"
 
-	"github.com/libp2p/go-libp2p/core/peer"
+	"github.com/mikelsr/go-libp2p/core/peer"
 )
 
 // PubSubSubscription is an active PubSub subscription

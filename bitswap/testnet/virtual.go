@@ -8,20 +8,20 @@ import (
 	"sync/atomic"
 	"time"
 
-	bsmsg "github.com/ipfs/boxo/bitswap/message"
-	bsnet "github.com/ipfs/boxo/bitswap/network"
+	bsmsg "github.com/mikelsr/boxo/bitswap/message"
+	bsnet "github.com/mikelsr/boxo/bitswap/network"
 
-	mockrouting "github.com/ipfs/boxo/routing/mock"
 	cid "github.com/ipfs/go-cid"
 	delay "github.com/ipfs/go-ipfs-delay"
+	mockrouting "github.com/mikelsr/boxo/routing/mock"
 
-	tnet "github.com/libp2p/go-libp2p-testing/net"
-	"github.com/libp2p/go-libp2p/core/connmgr"
-	"github.com/libp2p/go-libp2p/core/peer"
-	protocol "github.com/libp2p/go-libp2p/core/protocol"
-	"github.com/libp2p/go-libp2p/core/routing"
-	mocknet "github.com/libp2p/go-libp2p/p2p/net/mock"
-	"github.com/libp2p/go-libp2p/p2p/protocol/ping"
+	tnet "github.com/mikelsr/go-libp2p-testing/net"
+	"github.com/mikelsr/go-libp2p/core/connmgr"
+	"github.com/mikelsr/go-libp2p/core/peer"
+	protocol "github.com/mikelsr/go-libp2p/core/protocol"
+	"github.com/mikelsr/go-libp2p/core/routing"
+	mocknet "github.com/mikelsr/go-libp2p/p2p/net/mock"
+	"github.com/mikelsr/go-libp2p/p2p/protocol/ping"
 )
 
 // VirtualNetwork generates a new testnet instance - a fake network that

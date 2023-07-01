@@ -6,17 +6,17 @@ import (
 	"testing"
 	"time"
 
-	bsbpm "github.com/ipfs/boxo/bitswap/client/internal/blockpresencemanager"
-	notifications "github.com/ipfs/boxo/bitswap/client/internal/notifications"
-	bspm "github.com/ipfs/boxo/bitswap/client/internal/peermanager"
-	bssim "github.com/ipfs/boxo/bitswap/client/internal/sessioninterestmanager"
-	bsspm "github.com/ipfs/boxo/bitswap/client/internal/sessionpeermanager"
-	"github.com/ipfs/boxo/bitswap/internal/testutil"
-	"github.com/ipfs/boxo/internal/test"
 	cid "github.com/ipfs/go-cid"
 	blocksutil "github.com/ipfs/go-ipfs-blocksutil"
 	delay "github.com/ipfs/go-ipfs-delay"
-	peer "github.com/libp2p/go-libp2p/core/peer"
+	bsbpm "github.com/mikelsr/boxo/bitswap/client/internal/blockpresencemanager"
+	notifications "github.com/mikelsr/boxo/bitswap/client/internal/notifications"
+	bspm "github.com/mikelsr/boxo/bitswap/client/internal/peermanager"
+	bssim "github.com/mikelsr/boxo/bitswap/client/internal/sessioninterestmanager"
+	bsspm "github.com/mikelsr/boxo/bitswap/client/internal/sessionpeermanager"
+	"github.com/mikelsr/boxo/bitswap/internal/testutil"
+	"github.com/mikelsr/boxo/internal/test"
+	peer "github.com/mikelsr/go-libp2p/core/peer"
 )
 
 type mockSessionMgr struct {

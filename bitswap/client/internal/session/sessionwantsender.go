@@ -3,10 +3,10 @@ package session
 import (
 	"context"
 
-	bsbpm "github.com/ipfs/boxo/bitswap/client/internal/blockpresencemanager"
+	bsbpm "github.com/mikelsr/boxo/bitswap/client/internal/blockpresencemanager"
 
 	cid "github.com/ipfs/go-cid"
-	peer "github.com/libp2p/go-libp2p/core/peer"
+	peer "github.com/mikelsr/go-libp2p/core/peer"
 )
 
 const (

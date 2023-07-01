@@ -6,12 +6,12 @@ import (
 	"testing"
 	"time"
 
-	ipns "github.com/ipfs/boxo/ipns"
-	path "github.com/ipfs/boxo/path"
-	mockrouting "github.com/ipfs/boxo/routing/mock"
 	ds "github.com/ipfs/go-datastore"
 	dssync "github.com/ipfs/go-datastore/sync"
-	tnet "github.com/libp2p/go-libp2p-testing/net"
+	ipns "github.com/mikelsr/boxo/ipns"
+	path "github.com/mikelsr/boxo/path"
+	mockrouting "github.com/mikelsr/boxo/routing/mock"
+	tnet "github.com/mikelsr/go-libp2p-testing/net"
 )
 
 func TestRoutingResolve(t *testing.T) {

@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ipfs/boxo/path"
-	ic "github.com/libp2p/go-libp2p/core/crypto"
-	"github.com/libp2p/go-libp2p/core/peerstore"
-	"github.com/libp2p/go-libp2p/p2p/host/peerstore/pstoremem"
+	"github.com/mikelsr/boxo/path"
+	ic "github.com/mikelsr/go-libp2p/core/crypto"
+	"github.com/mikelsr/go-libp2p/core/peerstore"
+	"github.com/mikelsr/go-libp2p/p2p/host/peerstore/pstoremem"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

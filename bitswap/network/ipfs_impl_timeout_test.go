@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ipfs/boxo/internal/test"
+	"github.com/mikelsr/boxo/internal/test"
 	"github.com/stretchr/testify/require"
 )
 

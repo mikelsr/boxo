@@ -8,7 +8,7 @@ import (
 	"github.com/ipfs/go-cid"
 	format "github.com/ipfs/go-ipld-format"
 
-	"github.com/ipfs/boxo/ipld/merkledag"
+	"github.com/mikelsr/boxo/ipld/merkledag"
 )
 
 // NewDAGGenerator returns an object capable of

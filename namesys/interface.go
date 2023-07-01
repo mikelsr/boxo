@@ -34,9 +34,9 @@ import (
 
 	"context"
 
-	opts "github.com/ipfs/boxo/coreiface/options/namesys"
-	"github.com/ipfs/boxo/path"
-	ci "github.com/libp2p/go-libp2p/core/crypto"
+	opts "github.com/mikelsr/boxo/coreiface/options/namesys"
+	"github.com/mikelsr/boxo/path"
+	ci "github.com/mikelsr/go-libp2p/core/crypto"
 )
 
 // ErrResolveFailed signals an error when attempting to resolve.

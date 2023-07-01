@@ -4,17 +4,17 @@ import (
 	"context"
 	"time"
 
-	"github.com/ipfs/boxo/bitswap"
-	bsnet "github.com/ipfs/boxo/bitswap/network"
-	tn "github.com/ipfs/boxo/bitswap/testnet"
-	blockstore "github.com/ipfs/boxo/blockstore"
 	ds "github.com/ipfs/go-datastore"
 	delayed "github.com/ipfs/go-datastore/delayed"
 	ds_sync "github.com/ipfs/go-datastore/sync"
 	delay "github.com/ipfs/go-ipfs-delay"
-	tnet "github.com/libp2p/go-libp2p-testing/net"
-	p2ptestutil "github.com/libp2p/go-libp2p-testing/netutil"
-	peer "github.com/libp2p/go-libp2p/core/peer"
+	"github.com/mikelsr/boxo/bitswap"
+	bsnet "github.com/mikelsr/boxo/bitswap/network"
+	tn "github.com/mikelsr/boxo/bitswap/testnet"
+	blockstore "github.com/mikelsr/boxo/blockstore"
+	tnet "github.com/mikelsr/go-libp2p-testing/net"
+	p2ptestutil "github.com/mikelsr/go-libp2p-testing/netutil"
+	peer "github.com/mikelsr/go-libp2p/core/peer"
 )
 
 // NewTestInstanceGenerator generates a new InstanceGenerator for the given

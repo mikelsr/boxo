@@ -8,17 +8,17 @@ import (
 	"os"
 	"path/filepath"
 
-	pb "github.com/ipfs/boxo/filestore/pb"
+	pb "github.com/mikelsr/boxo/filestore/pb"
 
 	proto "github.com/gogo/protobuf/proto"
-	dshelp "github.com/ipfs/boxo/datastore/dshelp"
-	posinfo "github.com/ipfs/boxo/filestore/posinfo"
 	blocks "github.com/ipfs/go-block-format"
 	cid "github.com/ipfs/go-cid"
 	ds "github.com/ipfs/go-datastore"
 	dsns "github.com/ipfs/go-datastore/namespace"
 	dsq "github.com/ipfs/go-datastore/query"
 	ipld "github.com/ipfs/go-ipld-format"
+	dshelp "github.com/mikelsr/boxo/datastore/dshelp"
+	posinfo "github.com/mikelsr/boxo/filestore/posinfo"
 	mh "github.com/multiformats/go-multihash"
 )
 

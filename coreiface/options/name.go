@@ -3,7 +3,7 @@ package options
 import (
 	"time"
 
-	ropts "github.com/ipfs/boxo/coreiface/options/namesys"
+	ropts "github.com/mikelsr/boxo/coreiface/options/namesys"
 )
 
 const (
